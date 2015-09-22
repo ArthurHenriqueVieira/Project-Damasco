@@ -125,7 +125,7 @@ bool initialize(){
     event_queue = al_create_event_queue();
     
     if(!event_queue) {
-        fprintf(stderr, "fail to create event_queue!\n");
+        fprintf(stderr, "failed to create event_queue!\n");
         al_destroy_display(display);
         return -1;
     }
