@@ -105,7 +105,7 @@ int main(int argc,char *argv[]){
     
     image = al_load_bitmap("ciao.jpg");
 
-    font = al_load_font("Arial Unicode MS.ttf", 45, 0);
+    font = al_load_font("04B_30__.ttf", 45, 0);
     if(!font){
         al_destroy_display(display);
         fprintf(stderr, "Erro ao carregar fonte\n");
