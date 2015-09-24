@@ -11,54 +11,25 @@
 #define LARGURA 1280
 #define ALTURA 720
 
-ALLEGRO_DISPLAY *display = NULL;
-ALLEGRO_BITMAP *image = NULL;
-ALLEGRO_AUDIO_STREAM *musica = NULL;
-ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *area_central=0;
-ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 
-bool initialize();
+enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
-int main(){
+int main(int argc,char *argv[]){
     bool exit = false;
-    if (!initialize()){
-        return -1;
-    }
+    bool keys[5] = {false,false,false,false,false};
+    int x = 0;
+    int y = 0;
 
-    al_draw_bitmap(image, 0, 0, 0);
-    al_flip_display();
-
-    while(!exit){
-        ALLEGRO_EVENT ev;
-        al_wait_for_event(event_queue, &ev);
-
-        if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            break;
-
-        if(ev.type == ALLEGRO_EVENT_KEY_DOWN) {
-        al_draw_bitmap(image, 0, 0, 0);
-        al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
-        al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
-            
-            if(ev.keyboard.keycode == ALLEGRO_KEY_SPACE)
-                al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);  
-        }
-        
-        al_flip_display();
-    }
-
-    al_destroy_sample(sample);
-    al_destroy_bitmap(image);
-    al_destroy_display(display);
-    al_destroy_event_queue(event_queue);
-    al_destroy_audio_stream(musica);
-   
-    return 0;
-}
-
-bool initialize(){
-  if(!al_init()){
+    ALLEGRO_TIMER *timer;
+    ALLEGRO_DISPLAY *display = NULL;
+    ALLEGRO_BITMAP *image = NULL;
+    ALLEGRO_AUDIO_STREAM *musica = NULL;
+    ALLEGRO_SAMPLE *sample = NULL;
+    ALLEGRO_BITMAP *area_central=0;
+    ALLEGRO_EVENT_QUEUE *event_queue = NULL;
+    ALLEGRO_FONT *font = NULL;
+    
+    if(!al_init()){
         fprintf(stderr, "failed to initialize allegro!\n");
         return -1;
     }
@@ -99,9 +70,11 @@ bool initialize(){
         fprintf(stderr, "failed to initialize image\n");
         return -1;
     }
-
-    if (!al_init_ttf_addon())
-    {
+    if(!al_init_font_addon()){
+        fprintf(stderr, "falha ao inicializar a fonte\n");
+        return -1;
+    }
+    if (!al_init_ttf_addon()){
         fprintf(stderr, "Falha ao inicializar add-on allegro_ttf.\n");
         return -1;
     }
@@ -131,12 +104,92 @@ bool initialize(){
     }
     
     image = al_load_bitmap("ciao.jpg");
+
+    font = al_load_font("Arial Unicode MS.ttf", 45, 0);
+    if(!font){
+        al_destroy_display(display);
+        fprintf(stderr, "Erro ao carregar fonte\n");
+        return -1;
+    }
     
     al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
     al_set_audio_stream_playing(musica, true);
-
+    
+    timer = al_create_timer(1.0/60);
+    
     al_register_event_source(event_queue, al_get_display_event_source(display));
     al_register_event_source(event_queue, al_get_keyboard_event_source());
+    al_register_event_source(event_queue, al_get_timer_event_source(timer));
+   
+    al_start_timer(timer);
+   
+    while(!exit){
+        ALLEGRO_EVENT ev;
+        al_wait_for_event(event_queue, &ev);
 
-    return true;
+        if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
+            switch(ev.keyboard.keycode){
+                case ALLEGRO_KEY_UP:    
+                    x += 1;
+                    break;
+                case ALLEGRO_KEY_DOWN:
+                    x -= 1;
+                    break;
+                case ALLEGRO_KEY_LEFT:
+                    keys[LEFT] = true;
+                    break;
+                case ALLEGRO_KEY_RIGHT:
+                    keys[RIGHT] = true;
+                    break;
+                case ALLEGRO_KEY_SPACE:
+                    keys[SPACE] = true;
+                    break; 
+            }
+        }else if(ev.type == ALLEGRO_EVENT_KEY_UP){
+            switch(ev.keyboard.keycode){
+                case ALLEGRO_KEY_UP:    
+                    keys[UP] = false;
+                    break;
+                case ALLEGRO_KEY_DOWN:
+                    keys[DOWN] = false;
+                    break;
+                case ALLEGRO_KEY_LEFT:
+                    keys[LEFT] = false;
+                    break;
+                case ALLEGRO_KEY_RIGHT:
+                    keys[RIGHT] = false;
+                    break;
+                case ALLEGRO_KEY_ESCAPE:
+                    exit = true;
+                    break;
+                case ALLEGRO_KEY_SPACE:
+                    keys[SPACE] = false;
+                    break;
+            } 
+        }else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+            break;
+        }
+        if(keys[SPACE] && ev.type == ALLEGRO_EVENT_TIMER)
+            al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL); 
+        
+        if(al_is_event_queue_empty(event_queue)){
+            al_draw_bitmap(image, 0, 0, 0);
+            al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
+            al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
+            al_draw_textf(font, al_map_rgb(0,0,0), LARGURA/2, 600, ALLEGRO_ALIGN_CENTRE, "%dX + Y", x);
+
+            al_flip_display();
+            al_clear_to_color(al_map_rgb(0,0,0));
+        }
+    }
+
+    al_destroy_font(font);
+    al_destroy_sample(sample);
+    al_destroy_bitmap(image);
+    al_destroy_display(display);
+    al_destroy_event_queue(event_queue);
+    al_destroy_audio_stream(musica);
+   
+    return 0;
 }
+
