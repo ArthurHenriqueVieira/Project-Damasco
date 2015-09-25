@@ -136,10 +136,10 @@ int main(int argc,char *argv[]){
                     x -= 1;
                     break;
                 case ALLEGRO_KEY_LEFT:
-                    keys[LEFT] = true;
+                    y -= 1;
                     break;
                 case ALLEGRO_KEY_RIGHT:
-                    keys[RIGHT] = true;
+                    y += 1;
                     break;
                 case ALLEGRO_KEY_SPACE:
                     keys[SPACE] = true;
@@ -176,7 +176,7 @@ int main(int argc,char *argv[]){
             al_draw_bitmap(image, 0, 0, 0);
             al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
             al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
-            al_draw_textf(font, al_map_rgb(0,0,0), LARGURA/2, 600, ALLEGRO_ALIGN_CENTRE, "%dX + Y", x);
+            al_draw_textf(font, al_map_rgb(0,0,0), LARGURA/2, 600, ALLEGRO_ALIGN_CENTRE, "%dX + %dY", x, y);
 
             al_flip_display();
             al_clear_to_color(al_map_rgb(0,0,0));
