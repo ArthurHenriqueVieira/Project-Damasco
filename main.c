@@ -11,23 +11,25 @@
 #define LARGURA 1280
 #define ALTURA 720
 
-
+enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
 int main(int argc, char *argv[]){
     bool exit = false;
     bool keys[5] = {false,false,false,false,false};
-    int x = 0;
-    int y = 0;
+    bool func[3] = {false, false, false};
+    int a = 0;
+    int b = 0;
+    int c = 0;
 
     ALLEGRO_TIMER *timer;
     ALLEGRO_DISPLAY *display = NULL;
     ALLEGRO_BITMAP *image = NULL;
     ALLEGRO_AUDIO_STREAM *musica = NULL;
     ALLEGRO_SAMPLE *sample = NULL;
-    ALLEGRO_BITMAP *botao=0;
+    ALLEGRO_BITMAP *botao=0, *botao_g = 0;
     ALLEGRO_EVENT_QUEUE *event_queue = NULL;
-    ALLEGRO_FONT *font = NULL;
+    ALLEGRO_FONT *font = NULL, *font2 = NULL;
     
     if(!al_init()){
         fprintf(stderr, "failed to initialize allegro!\n");
@@ -112,8 +114,21 @@ int main(int argc, char *argv[]){
         return -1;
     }
 
+    botao_g = al_create_bitmap(200,100);
+    if(!botao_g){
+        fprintf(stderr, "Falha ao iniciar bitmap\n");
+        al_destroy_display(display);
+        return -1;
+    }
+
     font = al_load_font("04B_30__.ttf", 45, 0);
     if(!font){
+        al_destroy_display(display);
+        fprintf(stderr, "Erro ao carregar fonte\n");
+        return -1;
+    }
+    font2 = al_load_font("04B_30__.ttf", 25, 0);
+    if(!font2){
         al_destroy_display(display);
         fprintf(stderr, "Erro ao carregar fonte\n");
         return -1;
@@ -138,16 +153,16 @@ int main(int argc, char *argv[]){
         if(ev.type == ALLEGRO_EVENT_KEY_DOWN){
             switch(ev.keyboard.keycode){
                 case ALLEGRO_KEY_UP:    
-                    x += 1;
+                    a += 1;
                     break;
                 case ALLEGRO_KEY_DOWN:
-                    x -= 1;
+                    a -= 1;
                     break;
                 case ALLEGRO_KEY_LEFT:
-                    y -= 1;
+                    b -= 1;
                     break;
                 case ALLEGRO_KEY_RIGHT:
-                    y += 1;
+                    b += 1;
                     break;
                 case ALLEGRO_KEY_SPACE:
                     keys[SPACE] = true;
@@ -177,16 +192,47 @@ int main(int argc, char *argv[]){
         }else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
             break;
         
-        }else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-            {
-                if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
-                    x += 1;
-                }else if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
-                    x -= 1;
-                }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
-                    y += 1;
-                }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
-                    y -= 1;
+        }else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                if(!func[0] && !func[1] && !func[2]){
+                    if (ev.mouse.x >= 216 && ev.mouse.x <= 416 && ev.mouse.y >= 575 && ev.mouse.y <= 675){
+                            func[CONS] = true;
+                    }else if (ev.mouse.x >= 560 && ev.mouse.x <= 760 && ev.mouse.y >= 575 && ev.mouse.y <= 675){
+                            func[PRIM] = true;
+                    }else if (ev.mouse.x >= 890 && ev.mouse.x <= 1090 && ev.mouse.y >= 575 && ev.mouse.y <= 675){
+                            func[SEC] = true;
+                    }
+                }
+                
+                if(func[0]){
+                    if (ev.mouse.x >= 695 && ev.mouse.x <= 725 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        b += 1;
+                    }else if (ev.mouse.x >= 695 && ev.mouse.x <= 725 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        b -= 1;
+                    }
+                }else if(func[1]){
+                    if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        a += 1;
+                    }else if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        a -= 1;
+                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        b += 1;
+                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        b -= 1;
+                    }
+                }else if(func[2]){
+                    if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        a += 1;
+                    }else if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        a -= 1;
+                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        b += 1;
+                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        b -= 1;
+                    }else if (ev.mouse.x >= 945 && ev.mouse.x <= 975 && ev.mouse.y >= 570 && ev.mouse.y <= 600){
+                        c += 1;
+                    }else if (ev.mouse.x >= 945 && ev.mouse.x <= 975 && ev.mouse.y >= 650 && ev.mouse.y <= 685){
+                        c -= 1;
+                    }
                 }
             }
         if(keys[SPACE] && ev.type == ALLEGRO_EVENT_TIMER)
@@ -195,31 +241,68 @@ int main(int argc, char *argv[]){
         
         if(al_is_event_queue_empty(event_queue)){
             al_draw_bitmap(image, 0, 0, 0);
+            al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
+            al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
             
             al_set_target_bitmap(botao);
             al_clear_to_color(al_map_rgb(0,0,0));
+            al_set_target_bitmap(botao_g);
+            al_clear_to_color(al_map_rgb(0,0,0));
 
             al_set_target_bitmap(al_get_backbuffer(display));
-            al_draw_bitmap(botao, 515, 570, 0);
-            al_draw_bitmap(botao, 515, 650, 0);
-            al_draw_bitmap(botao, 730, 570, 0);
-            al_draw_bitmap(botao, 730, 650, 0);
-            
-            al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
-            al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
-            al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", x);
-            al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
-            al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%dY", y);
+            if(!func[0] && !func[1] && !func[2]){
+                al_draw_bitmap(botao_g, LARGURA/6, 575, 0);
+                al_draw_bitmap(botao_g, 560, 575, 0);
+                al_draw_bitmap(botao_g, 890, 575, 0);   
+            }
+            if(func[0]){
+                al_draw_bitmap(botao, 685, 570, 0);
+                al_draw_bitmap(botao, 685, 650, 0);
+                
+                al_draw_text(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "F(x) = ");
+                al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
+                
+            }else if(func[1]){
+                al_draw_bitmap(botao, 515, 570, 0);
+                al_draw_bitmap(botao, 515, 650, 0);
+                al_draw_bitmap(botao, 730, 570, 0);
+                al_draw_bitmap(botao, 730, 650, 0);
+                
+                al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
+                al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
+                al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
+                al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
+                
+            }else if(func[2]){
+                al_draw_bitmap(botao, 515, 570, 0);
+                al_draw_bitmap(botao, 515, 650, 0);
+                al_draw_bitmap(botao, 730, 570, 0);
+                al_draw_bitmap(botao, 730, 650, 0);
+                al_draw_bitmap(botao, 945, 570, 0);
+                al_draw_bitmap(botao, 945, 650, 0);
+                
+
+                al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
+                al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
+                al_draw_text(font2, al_map_rgb(0,0,0), 580, 590, ALLEGRO_ALIGN_CENTRE, "2");
+                al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
+                al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%dX", b);
+                al_draw_text(font, al_map_rgb(0,0,0), 860, 600, ALLEGRO_ALIGN_CENTRE, "+");
+                al_draw_textf(font, al_map_rgb(0,0,0), 960, 600, ALLEGRO_ALIGN_CENTRE, "%d", c);
+                
+            }
 
             al_flip_display();
             al_clear_to_color(al_map_rgb(0,0,0));
         }
     }
 
+    al_destroy_font(font2);
     al_destroy_font(font);
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(botao);
+    al_destroy_bitmap(botao_g);
     al_destroy_display(display);
     al_destroy_event_queue(event_queue);
     al_destroy_audio_stream(musica);
