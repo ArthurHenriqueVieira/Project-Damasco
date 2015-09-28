@@ -234,10 +234,14 @@ int main(int argc, char *argv[]){
                         c -= 1;
                     }
                 }
+                    if (ev.mouse.x >= 1100 && ev.mouse.x <= 1230 && ev.mouse.y >= 670 && ev.mouse.y <= 700){
+                        func[0] = false;
+                        func[1] = false;
+                        func[2] = false;
+                    }
             }
         if(keys[SPACE] && ev.type == ALLEGRO_EVENT_TIMER)
             al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL); 
-        
         
         if(al_is_event_queue_empty(event_queue)){
             al_draw_bitmap(image, 0, 0, 0);
@@ -250,6 +254,9 @@ int main(int argc, char *argv[]){
             al_clear_to_color(al_map_rgb(0,0,0));
 
             al_set_target_bitmap(al_get_backbuffer(display));
+            if(func[0] || func[1] || func[2]){
+                al_draw_text(font2, al_map_rgb(0,0,0), 1100, 670, 0, "Voltar");
+            }
             if(!func[0] && !func[1] && !func[2]){
                 al_draw_bitmap(botao_g, LARGURA/6, 575, 0);
                 al_draw_bitmap(botao_g, 560, 575, 0);
