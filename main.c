@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
@@ -14,6 +14,8 @@
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
+void coordenadas();
+
 int main(int argc, char *argv[]){
     bool exit = false;
     bool keys[5] = {false,false,false,false,false};
@@ -21,6 +23,7 @@ int main(int argc, char *argv[]){
     int a = 0;
     int b = 0;
     int c = 0;
+    int x,y;
 
     ALLEGRO_TIMER *timer;
     ALLEGRO_DISPLAY *display = NULL;
@@ -238,13 +241,21 @@ int main(int argc, char *argv[]){
                         func[0] = false;
                         func[1] = false;
                         func[2] = false;
+                        a = 0;
+                        b = 0;
+                        c = 0;
                     }
+
             }
         if(keys[SPACE] && ev.type == ALLEGRO_EVENT_TIMER)
             al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL); 
         
         if(al_is_event_queue_empty(event_queue)){
             al_draw_bitmap(image, 0, 0, 0);
+                x=a;
+                y=b;
+            coordenadas(&x,&y);
+            al_draw_circle(x, y, 10, al_map_rgb(0, 0, 0), 2.0);
             al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
             al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
             
@@ -291,7 +302,7 @@ int main(int argc, char *argv[]){
 
                 al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
                 al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
-                al_draw_text(font2, al_map_rgb(0,0,0), 580, 590, ALLEGRO_ALIGN_CENTRE, "2");
+                al_draw_text(font2, al_map_rgb(0,0,0), 600, 590, ALLEGRO_ALIGN_CENTRE, "2");
                 al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
                 al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%dX", b);
                 al_draw_text(font, al_map_rgb(0,0,0), 860, 600, ALLEGRO_ALIGN_CENTRE, "+");
@@ -317,3 +328,11 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
+void coordenadas(int *x, int *y){
+    int OrigemX = 250;
+    int OrigemY = 500;
+
+    *x=OrigemX + ((*x) * 20);
+    *y=OrigemY - ((*y) * 20);
+
+}
