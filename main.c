@@ -15,6 +15,7 @@ enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
 void coordenadas();
+void segundograu();
 
 int main(int argc, char *argv[]){
     bool exit = false;
@@ -75,10 +76,10 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "failed to initialize image\n");
         return -1;
     }
-    if(!al_init_font_addon()){
-        fprintf(stderr, "falha ao inicializar a fonte\n");
-        return -1;
-    }
+    //if(!al_init_font_addon()){
+    //    fprintf(stderr, "falha ao inicializar a fonte\n");
+    //    return -1;
+    //}
     if (!al_init_ttf_addon()){
         fprintf(stderr, "Falha ao inicializar add-on allegro_ttf.\n");
         return -1;
@@ -252,9 +253,10 @@ int main(int argc, char *argv[]){
         
         if(al_is_event_queue_empty(event_queue)){
             al_draw_bitmap(image, 0, 0, 0);
-                x=a;
-                y=b;
-            coordenadas(&x,&y);
+            //    x=a;
+            //    y=b;
+            //coordenadas(&x,&y);
+            segundograu(a,b,c);
             al_draw_circle(x, y, 10, al_map_rgb(0, 0, 0), 2.0);
             al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
             al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
@@ -332,7 +334,26 @@ void coordenadas(int *x, int *y){
     int OrigemX = 250;
     int OrigemY = 500;
 
-    *x=OrigemX + ((*x) * 20);
-    *y=OrigemY - ((*y) * 20);
+    *x=OrigemX + ((*x) * 100);
+    *y=OrigemY - ((*y) * 50);
 
+}
+
+
+void segundograu(int a, int b, int c){
+    int i,x1,x2,y1,y2;
+    for(i=0;i<9;i++){
+        x1=i;
+        x2= i+1;
+    	y1= a*(x1*x1)+b*x1+c;
+    	y2= a*(x2*x2)+b*x2+c;
+        coordenadas(&x1,&y1);
+        coordenadas(&x2,&y2);
+    	al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
+    }
+
+
+
+
+	return;
 }
