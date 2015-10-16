@@ -15,17 +15,7 @@ enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
 void coordenadas();
-void segundograu(float a, float b, float c);
-
-struct projetil
-{
-    float x;
-    float y;
-
-    float raio;
-};
-
-struct projetil bala;
+void segundograu();
 
 int main(int argc, char *argv[]){
     bool exit = false;
@@ -340,30 +330,30 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-void coordenadas(float *x, float *y){
-    float OrigemX = 250;
-    float OrigemY = 500;
+void coordenadas(int *x, int *y){
+    int OrigemX = 250;
+    int OrigemY = 500;
 
-    *x=OrigemX + ((*x) * 35);
-    *y=OrigemY - ((*y));
+    *x=OrigemX + ((*x) * 100);
+    *y=OrigemY - ((*y) * 50);
 
 }
 
 
-void segundograu(float a, float b, float c){
-    float i,x1,x2,y1,y2;
-    for(i = 0; i < 500; i ++){
-        x1 = i;
-        x2 = i+1;
-
-    	y1 = a*(x1*x1)+b*x1+c;
-    	y2 = a*(x2*x2)+b*x2+c;
-
+void segundograu(int a, int b, int c){
+    int i,x1,x2,y1,y2;
+    for(i=0;i<9;i++){
+        x1=i;
+        x2= i+1;
+    	y1= a*(x1*x1)+b*x1+c;
+    	y2= a*(x2*x2)+b*x2+c;
         coordenadas(&x1,&y1);
         coordenadas(&x2,&y2);
-
     	al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
     }
 
-    return;
+
+
+
+	return;
 }
