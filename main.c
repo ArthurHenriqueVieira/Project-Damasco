@@ -45,16 +45,6 @@ bool initialize();
 void coordenadas();
 void segundograu(float a, float b, float c);
 
-struct projetil
-{
-    float x;
-    float y;
-
-    float raio;
-};
-
-struct projetil bala;
-
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
