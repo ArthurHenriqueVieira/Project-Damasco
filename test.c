@@ -53,6 +53,8 @@ void desenharBotoes(bool equacao[3]);
 void desenharImagens();
 void resetarTela();
 void coordenadas();
+int pegarValorEmX(int valor);
+int pegarValorEmY(int valor);
 
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
@@ -67,11 +69,13 @@ int main(void)
     bool equacoes[3] = {false, false, false};
     bool sair = false;
 
-    a = 0;
+    a = 1;
     b = 0;
     c = 0;
     x = 0;
     y = 0;
+
+    int count = 0;
  
     if (!inicializar())
     {
@@ -233,6 +237,20 @@ int main(void)
             al_draw_bitmap(image2, 0, 480, 0);
             desenharImagens();
             desenharBotoes(equacoes);
+
+            count++;
+            if (count == 5)
+            {
+                count = 0;
+
+                x ++;
+
+                y = a*(x*x)+b*x+c;
+            }
+            printf("%d -- %d\n", pegarValorEmX(x), pegarValorEmY(y));
+            
+            al_draw_filled_circle(pegarValorEmX(x), pegarValorEmY(y), 15, al_map_rgb(255, 0, 0));
+
             resetarTela();
         }
     }
@@ -253,6 +271,20 @@ int main(void)
 //////
 // Plano Cartesiano
 //////
+int pegarValorEmX(int valor)
+{
+    int origemX = 250;
+
+    int resposta = origemX + (valor*35);
+    return resposta;
+}
+int pegarValorEmY(int valor)
+{
+    int origemY = 500;
+
+    int resposta = origemY - valor;
+    return resposta;
+}
 void coordenadas(float *x, float *y){
     float OrigemX = 250;
     float OrigemY = 500;
