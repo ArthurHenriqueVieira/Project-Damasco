@@ -178,8 +178,7 @@ int main(){
             al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
             al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
             
-            al_set_target_bitmap(botao);
-            al_clear_to_color(al_map_rgb(0,0,0));
+           
             al_set_target_bitmap(botao_g);
             al_clear_to_color(al_map_rgb(0,0,0));
 
@@ -193,18 +192,18 @@ int main(){
                 al_draw_bitmap(botao_g, 890, 575, 0);   
             }
             if(func[0]){
-                al_draw_bitmap(botao, 685, 570, 0);
-                al_draw_bitmap(botao, 685, 650, 0);
+                al_draw_bitmap(botao, 685, 566, 0);
+                al_draw_bitmap(botao, 685, 648, 0);
 
                 al_draw_line(1150, 500 - (b*20), 200, 500 - (b*20),al_map_rgb(131,139,131), 3);
                 al_draw_text(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "F(x) = ");
                 al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
                 
             }else if(func[1]){
-                al_draw_bitmap(botao, 515, 570, 0);
-                al_draw_bitmap(botao, 515, 650, 0);
-                al_draw_bitmap(botao, 730, 570, 0);
-                al_draw_bitmap(botao, 730, 650, 0);
+                al_draw_bitmap(botao, 515, 566, 0);
+                al_draw_bitmap(botao, 515, 648, 0);
+                al_draw_bitmap(botao, 730, 566, 0);
+                al_draw_bitmap(botao, 730, 648, 0);
                 
                 al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
                 al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
@@ -212,12 +211,12 @@ int main(){
                 al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
                 
             }else if(func[2]){
-                al_draw_bitmap(botao, 515, 570, 0);
-                al_draw_bitmap(botao, 515, 650, 0);
-                al_draw_bitmap(botao, 730, 570, 0);
-                al_draw_bitmap(botao, 730, 650, 0);
-                al_draw_bitmap(botao, 945, 570, 0);
-                al_draw_bitmap(botao, 945, 650, 0);
+                al_draw_bitmap(botao, 515, 566, 0);
+                al_draw_bitmap(botao, 515, 648, 0);
+                al_draw_bitmap(botao, 730, 566, 0);
+                al_draw_bitmap(botao, 730, 648, 0);
+                al_draw_bitmap(botao, 945, 566, 0);
+                al_draw_bitmap(botao, 945, 648, 0);
                 
 
                 al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
@@ -324,7 +323,7 @@ int main(){
         image = al_load_bitmap("chas.jpg");
         initback(&BG, 0, 0, 0.2, 1280, 720, -1, image);
         
-        botao = al_create_bitmap(30,30);
+        botao = al_load_bitmap("down.bmp");
         if(!botao){
             fprintf(stderr, "Falha ao iniciar bitmap\n");
             al_destroy_display(display);
