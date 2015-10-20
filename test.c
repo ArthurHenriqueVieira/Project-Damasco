@@ -230,6 +230,7 @@ int main(void)
         if (render)
         {
             drawback(&imagemDeFundo);
+            al_draw_bitmap(image2, 0, 480, 0);
             desenharImagens();
             desenharBotoes(equacoes);
             resetarTela();
@@ -343,7 +344,7 @@ void desenharBotoes(bool equacao[3])
         al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
         al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
     }
-    else if(equacao[2])al_destroy_font(font2);
+    else if(equacao[2])
     {
         al_draw_bitmap(botao, 515, 570, 0);
         al_draw_bitmap(botao, 515, 650, 0);
