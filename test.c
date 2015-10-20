@@ -161,11 +161,11 @@ int main(void)
 
                 if(equacoes[0])
                 {
-                    if (ev.mouse.x >= 695 && ev.mouse.x <= 725 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
+                    if (ev.mouse.x >= 687 && ev.mouse.x <= 725 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
                     {
                         b += 1;
                     }
-                    else if (ev.mouse.x >= 695 && ev.mouse.x <= 725 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
+                    else if (ev.mouse.x >= 687 && ev.mouse.x <= 725 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
                     {
                         b -= 1;
                     }
@@ -305,10 +305,6 @@ void desenharImagens()
 }
 void desenharBotoes(bool equacao[3])
 {
-    al_set_target_bitmap(botao);
-    al_clear_to_color(al_map_rgb(0,0,0));
-    al_set_target_bitmap(botao_g);
-    al_clear_to_color(al_map_rgb(0,0,0));
 
     al_set_target_bitmap(al_get_backbuffer(janela));
     if(equacao[0] || equacao[1] || equacao[2])
@@ -319,24 +315,27 @@ void desenharBotoes(bool equacao[3])
     if(!equacao[0] && !equacao[1] && !equacao[2])
     {
         al_draw_bitmap(botao_g, LARGURA_TELA/6, 575, 0);
+        al_draw_text(font2, al_map_rgb(0,0,0), 235, 610, 0, "Constante");
         al_draw_bitmap(botao_g, 560, 575, 0);
+        al_draw_text(font2, al_map_rgb(0,0,0), 600, 610, 0, "Primeiro");
         al_draw_bitmap(botao_g, 890, 575, 0);
+        al_draw_text(font2, al_map_rgb(0,0,0), 930, 610, 0, "Segundo");
     }
 
     if(equacao[0])
     {
-        al_draw_bitmap(botao, 685, 570, 0);
-        al_draw_bitmap(botao, 685, 650, 0);
+        al_draw_bitmap(botao, 685, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 685, 648, 0);
 
         al_draw_text(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "F(x) = ");
         al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
     }
     else if(equacao[1])
     {
-        al_draw_bitmap(botao, 515, 570, 0);
-        al_draw_bitmap(botao, 515, 650, 0);
-        al_draw_bitmap(botao, 730, 570, 0);
-        al_draw_bitmap(botao, 730, 650, 0);
+        al_draw_bitmap(botao, 515, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 515, 648, 0);
+        al_draw_bitmap(botao, 730, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 730, 648, 0);
 
         al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
 
@@ -346,12 +345,12 @@ void desenharBotoes(bool equacao[3])
     }
     else if(equacao[2])
     {
-        al_draw_bitmap(botao, 515, 570, 0);
-        al_draw_bitmap(botao, 515, 650, 0);
-        al_draw_bitmap(botao, 730, 570, 0);
-        al_draw_bitmap(botao, 730, 650, 0);
-        al_draw_bitmap(botao, 945, 570, 0);
-        al_draw_bitmap(botao, 945, 650, 0);
+        al_draw_bitmap(botao, 515, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 515, 648, 0);
+        al_draw_bitmap(botao, 730, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 730, 648, 0);
+        al_draw_bitmap(botao, 945, 566, ALLEGRO_FLIP_VERTICAL);
+        al_draw_bitmap(botao, 945, 648, 0);
 
         al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
         al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
@@ -458,7 +457,7 @@ bool inicializar()
     image = al_load_bitmap("chas.jpg");
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
     
-    botao = al_create_bitmap(30,30);
+    botao = al_load_bitmap("button.bmp");
     if(!botao)
     {
         fprintf(stderr, "Falha ao iniciar bitmap\n");
@@ -466,7 +465,7 @@ bool inicializar()
         return -1;
     }
 
-    botao_g = al_create_bitmap(200,100);
+    botao_g = al_load_bitmap("buttong.bmp");
     if(!botao_g)
     {
         fprintf(stderr, "Falha ao iniciar bitmap\n");
