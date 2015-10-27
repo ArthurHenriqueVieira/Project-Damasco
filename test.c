@@ -43,7 +43,8 @@ typedef struct
 }Background;
 
 // Variaveis
-int a,b,c,x,y;
+float a,b,c,x,y;
+int pos;
 
 Background imagemDeFundo;
 
@@ -69,7 +70,8 @@ int main(void)
     bool equacoes[3] = {false, false, false};
     bool sair = false;
 
-    a = 1;
+    pos = 0; 
+    a = 0;
     b = 0;
     c = 0;
     x = 0;
@@ -100,21 +102,23 @@ int main(void)
                 switch(ev.keyboard.keycode)
                 {
                     case ALLEGRO_KEY_UP:    
-                        a += 1;
+                        keys[UP] = true;
                         break;
                     case ALLEGRO_KEY_DOWN:
-                        a -= 1;
+                        keys[DOWN] = true;
                         break;
                     case ALLEGRO_KEY_LEFT:
-                        b -= 1;
+                        pos -= 1;
                         break;
                     case ALLEGRO_KEY_RIGHT:
-                        b += 1;
+                        pos += 1;
+                        break;
+                    case ALLEGRO_KEY_ESCAPE:
+                        sair = true;
                         break;
                     case ALLEGRO_KEY_SPACE:
-                        al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL); 
                         keys[SPACE] = true;
-                        break; 
+                        break;
                 }
             }
             else if(ev.type == ALLEGRO_EVENT_KEY_UP)
@@ -134,14 +138,36 @@ int main(void)
                         keys[RIGHT] = false;
                         break;
                     case ALLEGRO_KEY_ESCAPE:
-                        exit = true;
+                        sair = true;
                         break;
                     case ALLEGRO_KEY_SPACE:
                         keys[SPACE] = false;
                         break;
                 } 
             }
-            else if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            
+            if(pos < 0)
+                pos = 2;
+            
+            if(pos > 2)
+                pos = 0;
+            
+            if(pos == 0){
+                a += keys[UP]*.1;
+                a -= keys[DOWN]*.1;    
+            }
+
+            else if(pos == 1){
+                b += keys[UP]*.1;
+                b -= keys[DOWN]*.1; 
+            }
+
+            else if(pos == 2){
+                c += keys[UP]*.1;
+                c -= keys[DOWN]*.1; 
+            }
+            
+            if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             {
                 break;
             }
@@ -215,7 +241,6 @@ int main(void)
                         c -= 1;
                     }
                 }
-
                 if (ev.mouse.x >= 1100 && ev.mouse.x <= 1230 && ev.mouse.y >= 670 && ev.mouse.y <= 700)
                 {
                     equacoes[0] = false;
@@ -234,7 +259,7 @@ int main(void)
         if (render)
         {
             drawback(&imagemDeFundo);
-            al_draw_bitmap(image2, 0, 480, 0);
+            al_draw_bitmap(image2, 0, 485, 0);
             desenharImagens();
             desenharBotoes(equacoes);
 
@@ -247,7 +272,6 @@ int main(void)
 
                 y = a*(x*x)+b*x+c;
             }
-            printf("%d -- %d\n", pegarValorEmX(x), pegarValorEmY(y));
             
             al_draw_filled_circle(pegarValorEmX(x), pegarValorEmY(y), 15, al_map_rgb(255, 0, 0));
 
@@ -275,7 +299,7 @@ int pegarValorEmX(int valor)
 {
     int origemX = 250;
 
-    int resposta = origemX + (valor*35);
+    int resposta = origemX + (valor*10);
     return resposta;
 }
 int pegarValorEmY(int valor)
@@ -360,7 +384,7 @@ void desenharBotoes(bool equacao[3])
         al_draw_bitmap(botao, 685, 648, 0);
 
         al_draw_text(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "F(x) = ");
-        al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
+        al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%.f", b);
     }
     else if(equacao[1])
     {
@@ -371,9 +395,9 @@ void desenharBotoes(bool equacao[3])
 
         al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
 
-        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
+        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", a);
         al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%d", b);
+        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%.f", b);
     }
     else if(equacao[2])
     {
@@ -385,12 +409,12 @@ void desenharBotoes(bool equacao[3])
         al_draw_bitmap(botao, 945, 648, 0);
 
         al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
-        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%dX", a);
+        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", a);
         al_draw_text(font2, al_map_rgb(0,0,0), 600, 590, ALLEGRO_ALIGN_CENTRE, "2");
         al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%dX", b);
+        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", b);
         al_draw_text(font, al_map_rgb(0,0,0), 860, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 960, 600, ALLEGRO_ALIGN_CENTRE, "%d", c);
+        al_draw_textf(font, al_map_rgb(0,0,0), 960, 600, ALLEGRO_ALIGN_CENTRE, "%.f", c);
     }
 }
  

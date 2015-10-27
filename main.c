@@ -370,17 +370,17 @@ void coordenadas(float *x, float *y){
     float OrigemX = 250;
     float OrigemY = 500;
 
-    *x=OrigemX + ((*x) * 35);
-    *y=OrigemY - ((*y));
+    *x=OrigemX + ((*x) * 100);
+    *y=OrigemY - ((*y) * 50);
 
 }
 
 
 void segundograu(float a, float b, float c){
     float i,x1,x2,y1,y2;
-    for(i = 0; i < 500; i ++){
+    for(i = 0; i < 9; i += .125){
         x1 = i;
-        x2 = i+1;
+        x2 = i+.125;
 
     	y1 = a*(x1*x1)+b*x1+c;
     	y2 = a*(x2*x2)+b*x2+c;
