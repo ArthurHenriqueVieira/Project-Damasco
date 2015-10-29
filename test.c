@@ -54,6 +54,7 @@ void desenharBotoes(bool equacao[3]);
 void desenharImagens();
 void resetarTela();
 void coordenadas();
+void segundograu(float a, float b, float c);
 int pegarValorEmX(int valor);
 int pegarValorEmY(int valor);
 
@@ -153,105 +154,35 @@ int main(void)
                 pos = 0;
             
             if(pos == 0){
-                a += keys[UP]*.1;
-                a -= keys[DOWN]*.1;    
+                count++;
+                if (count >= 7){
+                    count = 0;
+                    a += keys[UP]*.25;
+                    a -= keys[DOWN]*.25;    
+                }
             }
 
             else if(pos == 1){
-                b += keys[UP]*.1;
-                b -= keys[DOWN]*.1; 
+                count++;
+                if (count >= 7){
+                    count = 0;
+                    b += keys[UP]*.25;
+                    b -= keys[DOWN]*.25;    
+                }
             }
 
             else if(pos == 2){
-                c += keys[UP]*.1;
-                c -= keys[DOWN]*.1; 
+                count++;
+                if (count >= 7){
+                    count = 0;
+                    c += keys[UP]*.25;
+                    c -= keys[DOWN]*.25;    
+                }
             }
             
             if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             {
                 break;
-            }
-            else if (ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
-            {
-                if(!equacoes[0] && !equacoes[1] && !equacoes[2])
-                {
-                    if (ev.mouse.x >= 216 && ev.mouse.x <= 416 && ev.mouse.y >= 575 && ev.mouse.y <= 675)
-                    {
-                        equacoes[CONS] = true;
-                    }
-                    else if (ev.mouse.x >= 560 && ev.mouse.x <= 760 && ev.mouse.y >= 575 && ev.mouse.y <= 675)
-                    {
-                        equacoes[PRIM] = true;
-                    }
-                    else if (ev.mouse.x >= 890 && ev.mouse.x <= 1090 && ev.mouse.y >= 575 && ev.mouse.y <= 675)
-                    {
-                        equacoes[SEC] = true;
-                    }
-                }
-
-                if(equacoes[0])
-                {
-                    if (ev.mouse.x >= 687 && ev.mouse.x <= 725 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        b += 1;
-                    }
-                    else if (ev.mouse.x >= 687 && ev.mouse.x <= 725 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        b -= 1;
-                    }
-                }else if(equacoes[1])
-                {
-                    if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        a += 1;
-                    }
-                    else if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        a -= 1;
-                    }
-                    else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        b += 1;
-                    }
-                    else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        b -= 1;
-                    }
-                }
-                else if(equacoes[2])
-                {
-                    if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        a += 1;
-                    }
-                    else if (ev.mouse.x >= 515 && ev.mouse.x <= 545 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        a -= 1;
-                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        b += 1;
-                    }else if (ev.mouse.x >= 730 && ev.mouse.x <= 760 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        b -= 1;
-                    }else if (ev.mouse.x >= 945 && ev.mouse.x <= 975 && ev.mouse.y >= 570 && ev.mouse.y <= 600)
-                    {
-                        c += 1;
-                    }else if (ev.mouse.x >= 945 && ev.mouse.x <= 975 && ev.mouse.y >= 650 && ev.mouse.y <= 685)
-                    {
-                        c -= 1;
-                    }
-                }
-                if (ev.mouse.x >= 1100 && ev.mouse.x <= 1230 && ev.mouse.y >= 670 && ev.mouse.y <= 700)
-                {
-                    equacoes[0] = false;
-                    equacoes[1] = false;
-                    equacoes[2] = false;
-                    a = 0;
-                    b = 0;
-                    c = 0;
-                    x = 0;
-                    y = 0;
-                }
             }
         }
 
@@ -262,13 +193,13 @@ int main(void)
             al_draw_bitmap(image2, 0, 485, 0);
             desenharImagens();
             desenharBotoes(equacoes);
-
+            segundograu(a, b, c);
             count++;
-            if (count == 5)
+            if (count == 10)
             {
                 count = 0;
 
-                x ++;
+                x +=1;
 
                 y = a*(x*x)+b*x+c;
             }
@@ -299,22 +230,42 @@ int pegarValorEmX(int valor)
 {
     int origemX = 250;
 
-    int resposta = origemX + (valor*10);
+    int resposta = origemX + (valor*100);
     return resposta;
 }
 int pegarValorEmY(int valor)
 {
     int origemY = 500;
 
-    int resposta = origemY - valor;
+    int resposta = origemY - (valor*50);
     return resposta;
 }
 void coordenadas(float *x, float *y){
     float OrigemX = 250;
     float OrigemY = 500;
 
-    *x=OrigemX + ((*x) * 35);
-    *y=OrigemY - ((*y));
+    *x=OrigemX + ((*x) * 100);
+    *y=OrigemY - ((*y) * 50);
+
+}
+
+
+void segundograu(float a, float b, float c){
+    float i,x1,x2,y1,y2;
+    for(i = 0; i < 9; i += .1){
+        x1 = i;
+        x2 = i+.1;
+
+        y1 = a*(x1*x1)+b*x1+c;
+        y2 = a*(x2*x2)+b*x2+c;
+
+        coordenadas(&x1,&y1);
+        coordenadas(&x2,&y2);
+
+        al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
+    }
+
+    return;
 }
 
 //////
@@ -344,7 +295,6 @@ void drawback(Background *fundo)
         al_draw_bitmap(fundo->image, (fundo->x + fundo->width), fundo->y, 0);
 
 }
-
 //////
 // Metodos de Desenho
 //////
@@ -363,59 +313,9 @@ void desenharBotoes(bool equacao[3])
 {
 
     al_set_target_bitmap(al_get_backbuffer(janela));
-    if(equacao[0] || equacao[1] || equacao[2])
-    {
-        al_draw_text(font2, al_map_rgb(0,0,0), 1100, 670, 0, "Voltar");
-    }
 
-    if(!equacao[0] && !equacao[1] && !equacao[2])
-    {
-        al_draw_bitmap(botao_g, LARGURA_TELA/6, 575, 0);
-        al_draw_text(font2, al_map_rgb(0,0,0), 235, 610, 0, "Constante");
-        al_draw_bitmap(botao_g, 560, 575, 0);
-        al_draw_text(font2, al_map_rgb(0,0,0), 600, 610, 0, "Primeiro");
-        al_draw_bitmap(botao_g, 890, 575, 0);
-        al_draw_text(font2, al_map_rgb(0,0,0), 930, 610, 0, "Segundo");
-    }
-
-    if(equacao[0])
-    {
-        al_draw_bitmap(botao, 685, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 685, 648, 0);
-
-        al_draw_text(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "F(x) = ");
-        al_draw_textf(font, al_map_rgb(0,0,0), 700, 600, ALLEGRO_ALIGN_CENTRE, "%.f", b);
-    }
-    else if(equacao[1])
-    {
-        al_draw_bitmap(botao, 515, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 515, 648, 0);
-        al_draw_bitmap(botao, 730, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 730, 648, 0);
-
-        al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
-
-        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", a);
-        al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%.f", b);
-    }
-    else if(equacao[2])
-    {
-        al_draw_bitmap(botao, 515, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 515, 648, 0);
-        al_draw_bitmap(botao, 730, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 730, 648, 0);
-        al_draw_bitmap(botao, 945, 566, ALLEGRO_FLIP_VERTICAL);
-        al_draw_bitmap(botao, 945, 648, 0);
-
-        al_draw_text(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= ");
-        al_draw_textf(font, al_map_rgb(0,0,0), 525, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", a);
-        al_draw_text(font2, al_map_rgb(0,0,0), 600, 590, ALLEGRO_ALIGN_CENTRE, "2");
-        al_draw_text(font, al_map_rgb(0,0,0), 640, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 745, 600, ALLEGRO_ALIGN_CENTRE, "%.fX", b);
-        al_draw_text(font, al_map_rgb(0,0,0), 860, 600, ALLEGRO_ALIGN_CENTRE, "+");
-        al_draw_textf(font, al_map_rgb(0,0,0), 960, 600, ALLEGRO_ALIGN_CENTRE, "%.f", c);
-    }
+        al_draw_textf(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= %.fX + %.fX + %.f", a,b,c);
+    
 }
  
 bool inicializar()
