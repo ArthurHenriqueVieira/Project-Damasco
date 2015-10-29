@@ -43,7 +43,7 @@ typedef struct
 }Background;
 
 // Variaveis
-float a,b,c,x,y;
+int a,b,c,x,y;
 int pos;
 
 Background imagemDeFundo;
@@ -147,38 +147,6 @@ int main(void)
                 } 
             }
             
-            if(pos < 0)
-                pos = 2;
-            
-            if(pos > 2)
-                pos = 0;
-            
-            if(pos == 0){
-                count++;
-                if (count >= 7){
-                    count = 0;
-                    a += keys[UP]*.25;
-                    a -= keys[DOWN]*.25;    
-                }
-            }
-
-            else if(pos == 1){
-                count++;
-                if (count >= 7){
-                    count = 0;
-                    b += keys[UP]*.25;
-                    b -= keys[DOWN]*.25;    
-                }
-            }
-
-            else if(pos == 2){
-                count++;
-                if (count >= 7){
-                    count = 0;
-                    c += keys[UP]*.25;
-                    c -= keys[DOWN]*.25;    
-                }
-            }
             
             if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             {
@@ -194,7 +162,7 @@ int main(void)
             desenharImagens();
             desenharBotoes(equacoes);
             segundograu(a, b, c);
-            count++;
+            
             if (count == 10)
             {
                 count = 0;
@@ -202,6 +170,37 @@ int main(void)
                 x +=1;
 
                 y = a*(x*x)+b*x+c;
+            }
+            if(pos < 0)
+                pos = 2;
+            
+            if(pos > 2)
+                pos = 0;
+            
+            if(pos == 0){
+                count++;
+                if (count >= 10){
+                    a += keys[UP]*1;
+                    a -= keys[DOWN]*1;    
+                }    
+            }
+
+            else if(pos == 1){
+                count++;
+                if (count >= 10){
+                    count = 0;
+                    b += keys[UP]*1;
+                    b -= keys[DOWN]*1;    
+                }
+            }
+
+            else if(pos == 2){
+                count++;
+                if (count >= 10){
+                    count = 0;
+                    c += keys[UP]*1;
+                    c -= keys[DOWN]*1;    
+                }
             }
             
             al_draw_filled_circle(pegarValorEmX(x), pegarValorEmY(y), 15, al_map_rgb(255, 0, 0));
@@ -314,7 +313,7 @@ void desenharBotoes(bool equacao[3])
 
     al_set_target_bitmap(al_get_backbuffer(janela));
 
-        al_draw_textf(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= %.fX + %.fX + %.f", a,b,c);
+        al_draw_textf(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
     
 }
  
