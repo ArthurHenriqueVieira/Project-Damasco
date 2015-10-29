@@ -147,30 +147,6 @@ int main(void)
                 } 
             }
             
-            
-            if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-            {
-                break;
-            }
-        }
-
-        // Desenha na tela
-        if (render)
-        {
-            drawback(&imagemDeFundo);
-            al_draw_bitmap(image2, 0, 485, 0);
-            desenharImagens();
-            desenharBotoes(equacoes);
-            segundograu(a, b, c);
-            
-            if (count == 10)
-            {
-                count = 0;
-
-                x +=1;
-
-                y = a*(x*x)+b*x+c;
-            }
             if(pos < 0)
                 pos = 2;
             
@@ -201,6 +177,30 @@ int main(void)
                     c += keys[UP]*1;
                     c -= keys[DOWN]*1;    
                 }
+            }
+            
+            if(ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
+            {
+                break;
+            }
+        }
+
+        // Desenha na tela
+        if (render)
+        {
+            drawback(&imagemDeFundo);
+            al_draw_bitmap(image2, 0, 485, 0);
+            desenharImagens();
+            desenharBotoes(equacoes);
+            segundograu(a, b, c);
+            
+            if (count == 10)
+            {
+                count = 0;
+
+                x +=1;
+
+                y = a*(x*x)+b*x+c;
             }
             
             al_draw_filled_circle(pegarValorEmX(x), pegarValorEmY(y), 15, al_map_rgb(255, 0, 0));
@@ -313,7 +313,7 @@ void desenharBotoes(bool equacao[3])
 
     al_set_target_bitmap(al_get_backbuffer(janela));
 
-        al_draw_textf(font, al_map_rgb(0,0,0), 380, 600, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
+        al_draw_textf(font, al_map_rgb(0,0,0), 640, 680, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
     
 }
  
@@ -428,7 +428,7 @@ bool inicializar()
         return -1;
     }
 
-    font = al_load_font("04B_30__.ttf", 45, 0);
+    font = al_load_font("04B_30__.ttf", 30, 0);
     if(!font)
     {
         al_destroy_display(janela);
