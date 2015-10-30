@@ -8,6 +8,7 @@
 #include <allegro5/allegro_acodec.h>
  
 #include <stdio.h>
+#include <math.h>
 #include <stdbool.h>
  
 const int LARGURA_TELA = 1280;
@@ -44,7 +45,7 @@ typedef struct
 
 // Variaveis
 int a,b,c,x,y;
-int pos;
+int pos,aux=1,temp=0;
 
 Background imagemDeFundo;
 
@@ -54,7 +55,7 @@ void desenharBotoes(bool equacao[3]);
 void desenharImagens();
 void resetarTela();
 void coordenadas();
-void segundograu(float a, float b, float c);
+void segundograu(float a, float b, float c, int aux, int *auxtemp);
 int pegarValorEmX(int valor);
 int pegarValorEmY(int valor);
 
@@ -192,7 +193,15 @@ int main(void)
             al_draw_bitmap(image2, 0, 485, 0);
             desenharImagens();
             desenharBotoes(equacoes);
-            segundograu(a, b, c);
+            segundograu(a, b, c, aux,&temp);
+            if(temp<25)
+            	aux=1;
+            else if(temp>=25 && temp<50)
+            	aux=-1;
+            else
+            	temp=0;
+
+
             
             if (count == 10)
             {
@@ -249,7 +258,7 @@ void coordenadas(float *x, float *y){
 }
 
 
-void segundograu(float a, float b, float c){
+void segundograu(float a, float b, float c,int aux, int * auxtemp){
     float i,x1,x2,y1,y2;
     for(i = 0; i < 9; i += .1){
         x1 = i;
@@ -260,10 +269,13 @@ void segundograu(float a, float b, float c){
 
         coordenadas(&x1,&y1);
         coordenadas(&x2,&y2);
+        if (aux>0)
+        	al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
+        aux*=-1;
 
-        al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
+        
     }
-
+    *auxtemp=*auxtemp+1; 
     return;
 }
 
