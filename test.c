@@ -194,9 +194,9 @@ int main(void)
             desenharImagens();
             desenharBotoes(equacoes);
             segundograu(a, b, c, aux,&temp);
-            if(temp<25)
+            if(temp<50)
             	aux=1;
-            else if(temp>=25 && temp<50)
+            else if(temp>=50 && temp<100)
             	aux=-1;
             else
             	temp=0;
