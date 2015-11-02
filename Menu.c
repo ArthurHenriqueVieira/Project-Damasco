@@ -12,7 +12,7 @@
 #define ALTURA 720
 
 ALLEGRO_DISPLAY *display = NULL;
-ALLEGRO_BITMAP *image = NULL, *bee = NULL;
+ALLEGRO_BITMAP *image = NULL, *bee = NULL, *ladybug = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_FONT *font = NULL;
@@ -53,6 +53,12 @@ int main(){
 	        	over3 = true;
 	        }else over3 = false;
         }
+
+        if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+        	if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440){
+	        	exit = true;
+	        }
+        }
        	
        	/// Colore e escreve dependendo da posicao do mouse ///
        	if(!over)
@@ -74,30 +80,29 @@ int main(){
         
         x += 2 * dir_x;
         y += 2 * dir_y;        
- 
-        if (x >= LARGURA - raio)
+        
+        if (x >= LARGURA)
         {
             dir_x = -1;
-            x = LARGURA - raio;
+            x = LARGURA;
         } else if (x <= raio) {
             dir_x = 1;
             x = raio;
         }
  
-        if (y >= ALTURA - raio)
+        if (y >= ALTURA)
         {
             dir_y = -1;
-            y = ALTURA - raio;
+            y = ALTURA;
         } else if (y <= raio) {
             dir_y = 1;
             y = raio;
         }
-		if(x >= LARGURA - raio){
+		if(x >= LARGURA){
 			oi = true;
 		}else if(x <= 30)
 			oi = false;
-		
-	}
+	}	
 
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
@@ -174,7 +179,7 @@ bool initialize(){
         
         image = al_load_bitmap("menu.jpg");
         bee = al_load_bitmap("bee.png");
-  
+
         timer = al_create_timer(1.0/60);
         
         al_register_event_source(event_queue, al_get_display_event_source(display));
