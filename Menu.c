@@ -27,6 +27,7 @@ int main(){
     float x = raio;
     float y = raio;
     int dir_x = 1, dir_y = 1;
+    int oi =false;
 
 	initialize();
 
@@ -66,13 +67,13 @@ int main(){
         	al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
         else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
 
-        al_draw_bitmap(bee, x, y, 0);
+        al_draw_bitmap(bee, x, y, ALLEGRO_FLIP_HORIZONTAL*oi);
 
         al_flip_display();
         al_clear_to_color(al_map_rgb(0, 0, 0));
         
-        x += 2.0 * dir_x;
-        y += 2.0 * dir_y;        
+        x += 2 * dir_x;
+        y += 2 * dir_y;        
  
         if (x >= LARGURA - raio)
         {
@@ -91,6 +92,11 @@ int main(){
             dir_y = 1;
             y = raio;
         }
+		if(x >= LARGURA - raio){
+			oi = true;
+		}else if(x <= 30)
+			oi = false;
+		
 	}
 
 	al_destroy_display(display);
