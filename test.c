@@ -6,6 +6,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
+#include "objects.h"
  
 #include <stdio.h>
 #include <math.h>
@@ -27,26 +28,13 @@ ALLEGRO_FONT *font = NULL, *font2 = NULL;
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
-// Structs
-typedef struct
-{
-    float x;
-    float y;
-    float velX;
-    float velY;
-    int dirX;
-    int dirY;
-    int width;
-    int height;
-
-    ALLEGRO_BITMAP *image;
-
-}Background;
 
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
 
+//Variaveis Struct 
+Character FinnJake;
 Background imagemDeFundo;
 
 // Metodos
@@ -58,6 +46,8 @@ void coordenadas();
 void segundograu(float a, float b, float c, int aux, int *auxtemp);
 int pegarValorEmX(int valor);
 int pegarValorEmY(int valor);
+void InitCharacter(Character *FinnJake, int *c);
+void DrawCharacter(Character *FinnJake);
 
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
@@ -194,6 +184,9 @@ int main(void)
             desenharImagens();
             desenharBotoes(equacoes);
             segundograu(a, b, c, aux,&temp);
+            InitCharacter(&FinnJake, &c);
+            DrawCharacter(&FinnJake);
+            
             if(temp<50)
             	aux=1;
             else if(temp>=50 && temp<100)
@@ -260,7 +253,7 @@ void coordenadas(float *x, float *y){
 
 void segundograu(float a, float b, float c,int aux, int * auxtemp){
     float i,x1,x2,y1,y2;
-    for(i = 0; i < 9; i += .1){
+    for(i = 0; i < 9; i += .125){
         x1 = i;
         x2 = i+.1;
 
@@ -328,7 +321,22 @@ void desenharBotoes(bool equacao[3])
         al_draw_textf(font, al_map_rgb(0,0,0), 640, 680, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
     
 }
- 
+
+//////
+// Metodos do personagem
+//////
+void InitCharacter(Character *FinnJake, int *c){
+    FinnJake->x = 150;
+    FinnJake->y = 450 - (*c * 50);
+    FinnJake->ID = PLAYER;
+    FinnJake->live = 3;
+    FinnJake->score = 0;
+}
+
+void DrawCharacter(Character *FinnJake){
+    al_draw_filled_rectangle(FinnJake->x, FinnJake->y, FinnJake->x + 100, FinnJake->y + 100, al_map_rgb(0, 255,0));
+}
+
 bool inicializar()
 {
     if (!al_init())
@@ -342,7 +350,7 @@ bool inicializar()
         fprintf(stderr, "Falha ao inicializar add-on allegro_primitives.\n");
         return false;
     }
- 
+
     janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
     if (!janela)
     {
