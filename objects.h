@@ -14,7 +14,8 @@ typedef struct{
 	int ID;
 	int x;
 	int y;
-	int live;
+	int speed;	
+	bool live;
 }Bullet;
 
 typedef struct

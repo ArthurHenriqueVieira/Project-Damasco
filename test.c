@@ -14,6 +14,7 @@
  
 const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
+const int NUM_BULLETS = 5;
  
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
@@ -36,6 +37,7 @@ int pos,aux=1,temp=0;
 //Variaveis Struct 
 Character FinnJake;
 Background imagemDeFundo;
+Bullet bullets;
 
 // Metodos
 bool inicializar();
@@ -46,9 +48,15 @@ void coordenadas();
 void segundograu(float a, float b, float c, int aux, int *auxtemp);
 int pegarValorEmX(int valor);
 int pegarValorEmY(int valor);
+
+// Personagem
 void InitCharacter(Character *FinnJake, int *c);
 void DrawCharacter(Character *FinnJake);
-
+// Balas
+void InitBullet(Bullet *bullet);
+void DrawBullet(Bullet *bullet);
+void FireBullet(Bullet *bullet, Character *FinnJake);
+void UpdateBullet(Bullet *bullet);
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
@@ -110,6 +118,7 @@ int main(void)
                         break;
                     case ALLEGRO_KEY_SPACE:
                         keys[SPACE] = true;
+                        FireBullet(&bullets, &FinnJake);
                         break;
                 }
             }
@@ -186,13 +195,15 @@ int main(void)
             segundograu(a, b, c, aux,&temp);
             InitCharacter(&FinnJake, &c);
             DrawCharacter(&FinnJake);
-            
+            DrawBullet(&bullets);
+            UpdateBullet(&bullets);
+
             if(temp<50)
-            	aux=1;
+                aux=1;
             else if(temp>=50 && temp<100)
-            	aux=-1;
+                aux=-1;
             else
-            	temp=0;
+                temp=0;
 
 
             
@@ -263,7 +274,7 @@ void segundograu(float a, float b, float c,int aux, int * auxtemp){
         coordenadas(&x1,&y1);
         coordenadas(&x2,&y2);
         if (aux>0)
-        	al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
+            al_draw_line(x1, y1, x2, y2,al_map_rgb(0,0,0), 3);
         aux*=-1;
 
         
@@ -300,7 +311,7 @@ void drawback(Background *fundo)
 
 }
 //////
-// Metodos de Desenho
+// Metodos de desenharBotoes`
 //////
 void resetarTela()
 {
@@ -337,6 +348,36 @@ void DrawCharacter(Character *FinnJake){
     al_draw_filled_rectangle(FinnJake->x, FinnJake->y, FinnJake->x + 100, FinnJake->y + 100, al_map_rgb(0, 255,0));
 }
 
+//////
+// Metodos do projetil
+//////
+
+void InitBullet(Bullet *bullet){
+        bullet->ID = BULLET;
+        bullet->live = false;
+        bullet->speed = 10;
+}
+
+void DrawBullet(Bullet *bullet){
+    if(bullet->live)
+        al_draw_filled_circle(bullet->x, bullet->y, 15, al_map_rgb(255,255,255));
+}
+void FireBullet(Bullet *bullet, Character *FinnJake){
+        if(!bullet->live){
+            bullet->x = FinnJake->x+100;
+            bullet->y = FinnJake->y+50;
+            bullet->live = true;
+    }
+}
+void UpdateBullet(Bullet *bullet){
+    if(bullet->live){
+        bullet->x += bullet->speed;
+        if(bullet->x > LARGURA_TELA)    
+            bullet->live = false;
+    }
+}
+
+
 bool inicializar()
 {
     if (!al_init())
@@ -350,6 +391,8 @@ bool inicializar()
         fprintf(stderr, "Falha ao inicializar add-on allegro_primitives.\n");
         return false;
     }
+
+    InitBullet(&bullets);
 
     janela = al_create_display(LARGURA_TELA, ALTURA_TELA);
     if (!janela)

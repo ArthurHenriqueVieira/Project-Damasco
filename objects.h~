@@ -7,7 +7,7 @@ typedef struct{
 	int y;
 	int live;
 	int score;
-}Shooter;
+}Character;
 
 // Bullet or Arrow
 typedef struct{
