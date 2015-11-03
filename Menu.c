@@ -73,7 +73,7 @@ int main(){
         	al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
         else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
 
-        al_draw_bitmap(bee, x, y, ALLEGRO_FLIP_HORIZONTAL*oi);
+        //al_draw_bitmap(bee, x, y, ALLEGRO_FLIP_HORIZONTAL*oi);
 
         al_flip_display();
         al_clear_to_color(al_map_rgb(0, 0, 0));
