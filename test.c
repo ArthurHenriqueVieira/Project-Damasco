@@ -66,6 +66,7 @@ void UpdateBullet(Bullet *bullet,int a, int b, int c, float *posicao);
 // Alvos
 bool inicializarAlvos(Alvo alvos[]);
 void desenharAlvos(Alvo alvos[], int quantidade);
+void verificaColisao(Alvo alvos[], Bullet *bullet);
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
@@ -225,6 +226,7 @@ int main(void)
                 InitCharacter(&FinnJake, &c);
                 DrawCharacter(&FinnJake, &bullets);
                 DrawBullet(&bullets);
+                verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
                 desenharAlvos(listaDeAlvos, 4);
 
@@ -280,8 +282,6 @@ void coordenadas(float *x, float *y){
     *y=OrigemY - ((*y) * 50);
 
 }
-
-
 
 void segundograu(float a, float b, float c,int aux, int * auxtemp){
     float i,x1,x2,y1,y2;
@@ -443,22 +443,26 @@ bool inicializarAlvos(Alvo alvos[])
 {
     alvos[0].ID = ALVO;
     alvos[0].x = 1;
-    alvos[0].y = 1;
+    alvos[0].y = 5;
+    alvos[0].tamanho = 15;
     alvos[0].acertado = false;
 
     alvos[1].ID = ALVO;
-    alvos[1].x = 2;
-    alvos[1].y = 2;
+    alvos[1].x = 3;
+    alvos[1].y = 9;
+    alvos[1].tamanho = 15;
     alvos[1].acertado = false;
 
     alvos[2].ID = ALVO;
-    alvos[2].x = 3;
-    alvos[2].y = 1;
+    alvos[2].x = 5;
+    alvos[2].y = 5;
+    alvos[2].tamanho = 15;
     alvos[2].acertado = false;
 
     alvos[3].ID = ALVOFINAL;
-    alvos[3].x = 4;
-    alvos[3].y = 1;
+    alvos[3].x = 6;
+    alvos[3].y = 0;
+    alvos[3].tamanho = 15;
     alvos[3].acertado = false;
 }
 
@@ -471,6 +475,28 @@ void desenharAlvos(Alvo alvos[], int quantidade)
         if (!alvo.acertado)
         {
             al_draw_filled_circle(pegarValorEmX(alvo.x), pegarValorEmY(alvo.y), 15, al_map_rgb(255, 37, 189));
+        }
+    }
+}
+
+void verificaColisao(Alvo alvos[], Bullet *bullet)
+{
+    float valorX, valorY;
+
+    int i;
+    for(i = 0; i < 4; i++)
+    {
+        Alvo alvo = alvos[i];
+
+        valorX = alvo.x;
+        valorY = alvo.y;
+
+        coordenadas(&valorX, &valorY);
+
+        if (bullet->x == valorX && bullet->y == valorY)
+        {
+            alvo.x = true;
+            printf("LOUCURA \n");
         }
     }
 }

@@ -38,5 +38,6 @@ typedef struct
 	int ID;
 	int x;
 	int y;
+	int tamanho;
 	bool acertado;
 }Alvo;
