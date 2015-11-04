@@ -468,13 +468,18 @@ bool inicializarAlvos(Alvo alvos[])
 
 void desenharAlvos(Alvo alvos[], int quantidade)
 {
+    float valorX, valorY;
+
     int i;
     for(i = 0; i < quantidade; i++)
     {
-        Alvo alvo = alvos[i];
-        if (!alvo.acertado)
+        if (!alvos[i].acertado)
         {
-            al_draw_filled_circle(pegarValorEmX(alvo.x), pegarValorEmY(alvo.y), 15, al_map_rgb(255, 37, 189));
+            valorX = alvos[i].x;
+            valorY = alvos[i].y;
+
+            coordenadas(&valorX, &valorY);
+            al_draw_filled_circle(pegarValorEmX(alvos[i].x), pegarValorEmY(alvos[i].y), 15, al_map_rgb(255, 37, 189));
         }
     }
 }
@@ -486,17 +491,27 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
     int i;
     for(i = 0; i < 4; i++)
     {
-        Alvo alvo = alvos[i];
-
-        valorX = alvo.x;
-        valorY = alvo.y;
+        valorX = alvos[i].x;
+        valorY = alvos[i].y;
 
         coordenadas(&valorX, &valorY);
 
-        if (bullet->x == valorX && bullet->y == valorY)
+        // if (bullet->x >= valorX && bullet->x <=(valorX + alvos[i].tamanho))
+        // {
+        //     if (bullet->y >= valorY && bullet->y <=(valorY + alvos[i].tamanho))
+        //     {
+        //         alvos[i].acertado = true;
+        //         printf("LOUCURA \n");
+        //     }
+        // }
+
+        if (bullet->x > (valorX - alvos[i].tamanho) && bullet->x < (valorX + alvos[i].tamanho))
         {
-            alvo.x = true;
-            printf("LOUCURA \n");
+            if (bullet->y > (valorY - alvos[i].tamanho) && bullet->y < (valorY + alvos[i].tamanho))
+            {
+                alvos[i].acertado = true;
+                printf("LOUCURA \n");
+            }
         }
     }
 }
