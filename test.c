@@ -23,7 +23,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *botao=0, *botao_g = 0;
+ALLEGRO_BITMAP *Finn = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum FUNC{CONS, PRIM, SEC};
@@ -33,6 +33,9 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
+int curframe = 0, framecount = 0, framedelay = 60;
+int framewidth = 111;
+int frameheight = 131;
 
 //Variaveis Struct 
 Character FinnJake;
@@ -226,8 +229,7 @@ int main(void)
     al_destroy_font(font);
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
-    al_destroy_bitmap(botao);
-    al_destroy_bitmap(botao_g);
+    al_destroy_bitmap(Finn);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
@@ -249,7 +251,7 @@ int pegarValorEmY(int valor)
 {
     int origemY = 500;
 
-    int resposta = origemY - (valor*50);
+    int resposta = origemY - (valor*50);    
     return resposta;
 }
 void coordenadas(float *x, float *y){
@@ -345,7 +347,12 @@ void InitCharacter(Character *FinnJake, int *c){
 }
 
 void DrawCharacter(Character *FinnJake){
-    al_draw_filled_rectangle(FinnJake->x, FinnJake->y, FinnJake->x + 100, FinnJake->y + 100, al_map_rgb(0, 255,0));
+    if(++framecount >= framedelay){
+        if(++curframe >= 42)
+            curframe = 0;
+        framecount = 0;
+    }
+    al_draw_bitmap_region(Finn, curframe * framewidth, 0, framewidth, frameheight, FinnJake->x + 20, FinnJake->y - 30, 0);
 }
 
 //////
@@ -355,13 +362,14 @@ void DrawCharacter(Character *FinnJake){
 void InitBullet(Bullet *bullet){
         bullet->ID = BULLET;
         bullet->live = false;
-        bullet->speed = 10;
+        bullet->speed = 1;
 }
 
 void DrawBullet(Bullet *bullet){
     if(bullet->live)
         al_draw_filled_circle(bullet->x, bullet->y, 15, al_map_rgb(255,255,255));
 }
+
 void FireBullet(Bullet *bullet, Character *FinnJake){
         if(!bullet->live){
             bullet->x = FinnJake->x+100;
@@ -369,10 +377,11 @@ void FireBullet(Bullet *bullet, Character *FinnJake){
             bullet->live = true;
     }
 }
+
 void UpdateBullet(Bullet *bullet){
     if(bullet->live){
         bullet->x += bullet->speed;
-        if(bullet->x > LARGURA_TELA)    
+        if(bullet->x > LARGURA_TELA || bullet->y > ALTURA_TELA )    
             bullet->live = false;
     }
 }
@@ -473,23 +482,8 @@ bool inicializar()
 
     image2 = al_load_bitmap("chas2.jpg");
     image = al_load_bitmap("chas.jpg");
+    Finn = al_load_bitmap("Finn.png");
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
-    
-    botao = al_load_bitmap("button.bmp");
-    if(!botao)
-    {
-        fprintf(stderr, "Falha ao iniciar bitmap\n");
-        al_destroy_display(janela);
-        return -1;
-    }
-
-    botao_g = al_load_bitmap("buttong.bmp");
-    if(!botao_g)
-    {
-        fprintf(stderr, "Falha ao iniciar bitmap\n");
-        al_destroy_display(janela);
-        return -1;
-    }
 
     font = al_load_font("04B_30__.ttf", 30, 0);
     if(!font)
