@@ -19,6 +19,7 @@ const int NUM_BULLETS = 5;
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
+ALLEGRO_BITMAP *menuBg = NULL;
 ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
@@ -78,6 +79,8 @@ int main(void)
 {
     bool exit    = false;
     bool render  = false;
+
+    bool over = false, over2 = false, over3 = false;
     
     bool equacoes[3] = {false, false, false};
     bool sair = false;
@@ -95,7 +98,7 @@ int main(void)
     y = 0;
 
     inicializarAlvos(listaDeAlvos);
-    mudarEstado(&estado, JOGO);
+    mudarEstado(&estado, MENU);
  
     if (!inicializar())
     {
@@ -164,6 +167,23 @@ int main(void)
                         break;
                 } 
             }
+            else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
+            {
+               if (estado == MENU)
+               {
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340){
+                        over = true;
+                    }else over = false;
+
+                    if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390){
+                        over2 = true;
+                    }else over2 = false;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440){
+                        over3 = true;
+                    }else over3 = false;
+               }
+            }
             
             if(pos < 0)
                 pos = 2;
@@ -208,7 +228,19 @@ int main(void)
         {
             if (estado == MENU)
             {
-                /* code */
+                al_draw_bitmap(menuBg, 0, 0, 0);
+
+                if(!over)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar");
+        
+                if(!over2)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 350,ALLEGRO_ALIGN_CENTRE, "Tutorial");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 350,ALLEGRO_ALIGN_CENTRE, "Tutorial");
+        
+                if(!over3)  
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
             }
             else if (estado == JOGO)
             {
@@ -249,6 +281,7 @@ int main(void)
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
+    al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
@@ -496,21 +529,11 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
 
         coordenadas(&valorX, &valorY);
 
-        // if (bullet->x >= valorX && bullet->x <=(valorX + alvos[i].tamanho))
-        // {
-        //     if (bullet->y >= valorY && bullet->y <=(valorY + alvos[i].tamanho))
-        //     {
-        //         alvos[i].acertado = true;
-        //         printf("LOUCURA \n");
-        //     }
-        // }
-
         if (bullet->x > (valorX - alvos[i].tamanho) && bullet->x < (valorX + alvos[i].tamanho))
         {
             if (bullet->y > (valorY - alvos[i].tamanho) && bullet->y < (valorY + alvos[i].tamanho))
             {
                 alvos[i].acertado = true;
-                printf("LOUCURA \n");
             }
         }
     }
@@ -642,6 +665,7 @@ bool inicializar()
     al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
     al_set_audio_stream_playing(musica, true);
     
+    menuBg = al_load_bitmap("menu.jpg");
     timer = al_create_timer(1.0/60);
 
     al_register_event_source(fila_eventos, al_get_display_event_source(janela));
