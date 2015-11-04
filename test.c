@@ -26,6 +26,7 @@ ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_BITMAP *Finn = NULL, *FinnBomb = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
+enum ESTADO{MENU, JOGO};
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
@@ -43,6 +44,7 @@ bool keys[5] = {false,false,false,false,false};
 Character FinnJake;
 Background imagemDeFundo;
 Bullet bullets;
+Alvo listaDeAlvos[4];
 
 // Metodos
 bool inicializar();
@@ -53,7 +55,6 @@ void coordenadas();
 void segundograu(float a, float b, float c, int aux, int *auxtemp);
 int pegarValorEmX(int valor);
 int pegarValorEmY(int valor);
-
 // Personagem
 void InitCharacter(Character *FinnJake, int *c);
 void DrawCharacter(Character *FinnJake, Bullet *bullet);
@@ -62,10 +63,15 @@ void InitBullet(Bullet *bullet);
 void DrawBullet(Bullet *bullet);
 void FireBullet(Bullet *bullet, Character *FinnJake);
 void UpdateBullet(Bullet *bullet,int a, int b, int c, float *posicao);
+// Alvos
+bool inicializarAlvos(Alvo alvos[]);
+void desenharAlvos(Alvo alvos[], int quantidade);
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
 void drawback(Background *fundo);
+// Estado
+void mudarEstado(int *estado, int novoEstado);
  
 int main(void)
 {
@@ -78,6 +84,7 @@ int main(void)
     float posicao = 0;
 
     int count = 0;
+    int estado = -1;
 
     pos = 0; 
     a = 0;
@@ -85,6 +92,9 @@ int main(void)
     c = 0;
     x = 0;
     y = 0;
+
+    inicializarAlvos(listaDeAlvos);
+    mudarEstado(&estado, JOGO);
  
     if (!inicializar())
     {
@@ -195,32 +205,39 @@ int main(void)
         // Desenha na tela
         if (render)
         {
-            if(bullets.x > LARGURA_TELA || bullets.y > ALTURA_TELA)
-            {    
-                bullets.live = false;
-                posicao = 0;
+            if (estado == MENU)
+            {
+                /* code */
             }
+            else if (estado == JOGO)
+            {
+                if(bullets.x > LARGURA_TELA || bullets.y > ALTURA_TELA)
+                {
+                    bullets.live = false;
+                    posicao = 0;
+                }
 
-            drawback(&imagemDeFundo);
-            al_draw_bitmap(image2, 0, 485, 0);
-            desenharImagens();
-            desenharBotoes(equacoes);
-            segundograu(a, b, c, aux,&temp);
-            InitCharacter(&FinnJake, &c);
-            DrawCharacter(&FinnJake, &bullets);
-            DrawBullet(&bullets);
-            UpdateBullet(&bullets, a, b, c, &posicao);
+                drawback(&imagemDeFundo);
+                al_draw_bitmap(image2, 0, 485, 0);
+                desenharImagens();
+                desenharBotoes(equacoes);
+                segundograu(a, b, c, aux,&temp);
+                InitCharacter(&FinnJake, &c);
+                DrawCharacter(&FinnJake, &bullets);
+                DrawBullet(&bullets);
+                UpdateBullet(&bullets, a, b, c, &posicao);
+                desenharAlvos(listaDeAlvos, 4);
 
-            if(temp<50)
-                aux=1;
-            else if(temp>=50 && temp<100)
-                aux=-1;
-            else
-                temp=0;
+                if(temp<50)
+                    aux=1;
+                else if(temp>=50 && temp<100)
+                    aux=-1;
+                else
+                    temp=0;
 
-            if (count == 10)
-                count = 0;
-
+                if (count == 10)
+                    count = 0;
+            }
             resetarTela();
         }
     }
@@ -340,7 +357,8 @@ void desenharBotoes(bool equacao[3])
 //////
 // Metodos do personagem
 //////
-void InitCharacter(Character *FinnJake, int *c){
+void InitCharacter(Character *FinnJake, int *c)
+{
     FinnJake->x = 150;
     FinnJake->y = 450 - (*c * 50);
     FinnJake->ID = PLAYER;
@@ -348,18 +366,24 @@ void InitCharacter(Character *FinnJake, int *c){
     FinnJake->score = 0;
 }
 
-void DrawCharacter(Character *FinnJake, Bullet *bullet){
-    if(keys[SPACE] && a != 0 && !bullet->live){
-        if(++framecount >= 15){
-            if(++curframe >= 13){
+void DrawCharacter(Character *FinnJake, Bullet *bullet)
+{
+    if(keys[SPACE] && a != 0 && !bullet->live)
+    {
+        if(++framecount >= 15)
+        {
+            if(++curframe >= 13)
+            {
                 FireBullet(&bullets, &FinnJake);
                 keys[SPACE] = false;
             }
             framecount = 0;
         }
             al_draw_bitmap_region(FinnBomb, curframe * framewidth, 0, framewidth, frameheight, FinnJake->x + 20, FinnJake->y - 30, 0);
-    }else {
-        if(++framecount >= framedelay){
+    }else
+    {
+        if(++framecount >= framedelay)
+        {
             if(++curframe >= 42)
             curframe = 0;
             framecount = 0;
@@ -371,7 +395,6 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet){
 //////
 // Metodos do projetil
 //////
-
 void InitBullet(Bullet *bullet)
 {
         bullet->ID = BULLET;
@@ -387,11 +410,11 @@ void DrawBullet(Bullet *bullet)
 
 void FireBullet(Bullet *bullet, Character *FinnJake)
 {
-        if(!bullet->live)
-        {
-            bullet->x = FinnJake->x+100;
-            bullet->y = FinnJake->y+50;
-            bullet->live = true;
+    if(!bullet->live)
+    {
+        bullet->x = FinnJake->x+100;
+        bullet->y = FinnJake->y+50;
+        bullet->live = true;
     }
 }
 
@@ -413,6 +436,52 @@ void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
     }
 }
 
+//////
+// Metodos do Alvo
+//////
+bool inicializarAlvos(Alvo alvos[])
+{
+    alvos[0].ID = ALVO;
+    alvos[0].x = 1;
+    alvos[0].y = 1;
+    alvos[0].acertado = false;
+
+    alvos[1].ID = ALVO;
+    alvos[1].x = 2;
+    alvos[1].y = 2;
+    alvos[1].acertado = false;
+
+    alvos[2].ID = ALVO;
+    alvos[2].x = 3;
+    alvos[2].y = 1;
+    alvos[2].acertado = false;
+
+    alvos[3].ID = ALVOFINAL;
+    alvos[3].x = 4;
+    alvos[3].y = 1;
+    alvos[3].acertado = false;
+}
+
+void desenharAlvos(Alvo alvos[], int quantidade)
+{
+    int i;
+    for(i = 0; i < quantidade; i++)
+    {
+        Alvo alvo = alvos[i];
+        if (!alvo.acertado)
+        {
+            al_draw_filled_circle(pegarValorEmX(alvo.x), pegarValorEmY(alvo.y), 15, al_map_rgb(255, 37, 189));
+        }
+    }
+}
+
+//////
+// Metodos do estado
+//////
+void mudarEstado(int *estado, int novoEstado)
+{
+    *estado = novoEstado;
+}
 
 bool inicializar()
 {

@@ -1,5 +1,5 @@
 // Objects ID
-enum IDS{PLAYER, BULLET, ENEMY};
+enum IDS{PLAYER, BULLET, ALVO, ALVOFINAL};
 
 typedef struct{
 	int ID;
@@ -32,3 +32,11 @@ typedef struct
     ALLEGRO_BITMAP *image;
 
 }Background;
+
+typedef struct
+{
+	int ID;
+	int x;
+	int y;
+	bool acertado;
+}Alvo;
