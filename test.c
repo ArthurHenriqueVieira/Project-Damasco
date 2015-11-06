@@ -33,6 +33,7 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
+float contadorBala=0;
 int curframe = 0, framecount = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
@@ -59,7 +60,7 @@ void DrawCharacter(Character *FinnJake);
 void InitBullet(Bullet *bullet);
 void DrawBullet(Bullet *bullet);
 void FireBullet(Bullet *bullet, Character *FinnJake);
-void UpdateBullet(Bullet *bullet);
+void UpdateBullet(Bullet *bullet,int a, int b, int c, float *posicao);
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
@@ -73,14 +74,16 @@ int main(void)
     bool equacoes[3] = {false, false, false};
     bool sair = false;
 
+    float posicao = 0;
+
+    int count = 0;
+
     pos = 0; 
     a = 0;
     b = 0;
     c = 0;
     x = 0;
     y = 0;
-
-    int count = 0;
  
     if (!inicializar())
     {
@@ -191,6 +194,12 @@ int main(void)
         // Desenha na tela
         if (render)
         {
+            if(bullets.x > LARGURA_TELA || bullets.y > ALTURA_TELA)
+            {    
+                bullets.live = false;
+                posicao = 0;
+            }
+
             drawback(&imagemDeFundo);
             al_draw_bitmap(image2, 0, 485, 0);
             desenharImagens();
@@ -199,7 +208,7 @@ int main(void)
             InitCharacter(&FinnJake, &c);
             DrawCharacter(&FinnJake);
             DrawBullet(&bullets);
-            UpdateBullet(&bullets);
+            UpdateBullet(&bullets, a, b, c, &posicao);
 
             if(temp<50)
                 aux=1;
@@ -208,18 +217,8 @@ int main(void)
             else
                 temp=0;
 
-
-            
             if (count == 10)
-            {
                 count = 0;
-
-                x +=1;
-
-                y = a*(x*x)+b*x+c;
-            }
-            
-            al_draw_filled_circle(pegarValorEmX(x), pegarValorEmY(y), 15, al_map_rgb(255, 0, 0));
 
             resetarTela();
         }
@@ -262,6 +261,7 @@ void coordenadas(float *x, float *y){
     *y=OrigemY - ((*y) * 50);
 
 }
+
 
 
 void segundograu(float a, float b, float c,int aux, int * auxtemp){
@@ -359,30 +359,44 @@ void DrawCharacter(Character *FinnJake){
 // Metodos do projetil
 //////
 
-void InitBullet(Bullet *bullet){
+void InitBullet(Bullet *bullet)
+{
         bullet->ID = BULLET;
         bullet->live = false;
-        bullet->speed = 1;
+        bullet->speed = 5;
 }
 
-void DrawBullet(Bullet *bullet){
+void DrawBullet(Bullet *bullet)
+{
     if(bullet->live)
         al_draw_filled_circle(bullet->x, bullet->y, 15, al_map_rgb(255,255,255));
 }
 
-void FireBullet(Bullet *bullet, Character *FinnJake){
-        if(!bullet->live){
+void FireBullet(Bullet *bullet, Character *FinnJake)
+{
+        if(!bullet->live)
+        {
             bullet->x = FinnJake->x+100;
             bullet->y = FinnJake->y+50;
             bullet->live = true;
     }
 }
 
-void UpdateBullet(Bullet *bullet){
-    if(bullet->live){
-        bullet->x += bullet->speed;
-        if(bullet->x > LARGURA_TELA || bullet->y > ALTURA_TELA )    
-            bullet->live = false;
+void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
+{
+    if(bullet->live)
+    {
+        float posicaoX,posicaoY;
+
+        posicaoX = *posicao;
+        posicaoY = a*(posicaoX * posicaoX) + b*posicaoX + c;
+
+        coordenadas(&posicaoX,&posicaoY);
+
+        bullet->x = posicaoX;
+        bullet->y = posicaoY;
+
+        *posicao += 0.01;
     }
 }
 
