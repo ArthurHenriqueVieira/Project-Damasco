@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL, *FinnBomb = NULL;
+ALLEGRO_BITMAP *Finn = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO};
@@ -98,7 +98,7 @@ int main(void)
     y = 0;
 
     inicializarAlvos(listaDeAlvos);
-    mudarEstado(&estado, MENU);
+    mudarEstado(&estado, JOGO);
  
     if (!inicializar())
     {
@@ -283,6 +283,8 @@ int main(void)
     al_destroy_bitmap(Finn);
     al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
+    al_destroy_bitmap(ThrowJake);
+    al_destroy_bitmap(Flame);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
@@ -401,6 +403,34 @@ void InitCharacter(Character *FinnJake, int *c)
 
 void DrawCharacter(Character *FinnJake, Bullet *bullet)
 {
+    if(keys[SPACE] && a == 0 && b == 0 && !bullet->live)
+    {
+        if(++framecount >= 10)
+        {
+            if(++curframe >= 15)
+            {
+                FireBullet(&bullets, &FinnJake);
+                keys[SPACE] = false;
+            }
+            framecount = 0;
+        }
+            al_draw_bitmap_region(ThrowJake, curframe * 179, 0, 179, 97, FinnJake->x - 20, FinnJake->y - 10, 0);
+    }else
+
+    if(keys[SPACE] && a == 0 && b != 0 && !bullet->live)
+    {
+        if(++framecount >= 20)
+        {
+            if(++curframe >= 14)
+            {
+                FireBullet(&bullets, &FinnJake);
+                keys[SPACE] = false;
+            }
+            framecount = 0;
+        }
+            al_draw_bitmap_region(Flame, curframe * 175, 0, 175, 163, FinnJake->x - 30, FinnJake->y - 50, 0);
+    }else
+
     if(keys[SPACE] && a != 0 && !bullet->live)
     {
         if(++framecount >= 15)
@@ -644,6 +674,8 @@ bool inicializar()
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
     FinnBomb = al_load_bitmap("FinnBomb.png");
+    Flame = al_load_bitmap("Flame.png");
+    ThrowJake = al_load_bitmap("ThrowJake.png");
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
 
     font = al_load_font("04B_30__.ttf", 30, 0);
