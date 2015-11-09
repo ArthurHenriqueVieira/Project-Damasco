@@ -39,6 +39,7 @@ int curframe = 0,curframeb = 0, framecount = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
 bool keys[5] = {false,false,false,false,false};
+bool Fire = false;
 
 //Variaveis Struct 
 Character FinnJake;
@@ -274,6 +275,8 @@ int main(void)
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
                 desenharAlvos(listaDeAlvos, 4);
+                if(Fire)
+                    FireBullet(&bullets, &FinnJake);
 
                 if(temp<50)
                     aux=1;
@@ -422,7 +425,7 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
         {
             if(++curframe >= 14)
             {
-                FireBullet(&bullets, &FinnJake);
+                Fire = true;
                 keys[SPACE] = false;
             }
             framecount = 0;
@@ -436,7 +439,7 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
         {
             if(++curframe >= 14)
             {
-                FireBullet(&bullets, &FinnJake);
+                Fire = true;
                 keys[SPACE] = false;
             }
             framecount = 0;
@@ -450,7 +453,7 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
         {
             if(++curframe >= 13)
             {
-                FireBullet(&bullets, &FinnJake);
+                Fire = true;
                 keys[SPACE] = false;
             }
             framecount = 0;
@@ -491,7 +494,7 @@ void FireBullet(Bullet *bullet, Character *FinnJake)
         bullet->x = FinnJake->x+100;
         bullet->y = FinnJake->y+50;
         bullet->live = true;
-    }
+    }else Fire = false;
 }
 
 void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
