@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO};
@@ -243,6 +243,7 @@ int main(void)
             if (estado == MENU)
             {
                 al_draw_bitmap(menuBg, 0, 0, 0);
+                al_draw_bitmap(BMO, 110, -30, 0);
 
                 if(!over)
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar");
@@ -298,6 +299,7 @@ int main(void)
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
     al_destroy_bitmap(Jake);
+    al_destroy_bitmap(BMO);
     al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
     al_destroy_bitmap(ThrowJake);
@@ -697,6 +699,7 @@ bool inicializar()
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
     Jake = al_load_bitmap("Jake.png");
+    BMO = al_load_bitmap("BMO.png");
     FinnBomb = al_load_bitmap("FinnBomb.png");
     Flame = al_load_bitmap("Flame.png");
     ThrowJake = al_load_bitmap("ThrowJake.png");
