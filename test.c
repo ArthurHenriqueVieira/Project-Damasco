@@ -35,7 +35,6 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
-float contadorBala=0;
 int curframe = 0,curframeb = 0, framecount = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
@@ -118,55 +117,59 @@ int main(void)
                  render = true;
             }
 
-            if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+            if(!bullets.live)
             {
-                switch(ev.keyboard.keycode)
-                {
-                    case ALLEGRO_KEY_UP:    
-                        keys[UP] = true;
-                        break;
-                    case ALLEGRO_KEY_DOWN:
-                        keys[DOWN] = true;
-                        break;
-                    case ALLEGRO_KEY_LEFT:
-                        pos -= 1;
-                        break;
-                    case ALLEGRO_KEY_RIGHT:
-                        pos += 1;
-                        break;
-                    case ALLEGRO_KEY_ESCAPE:
-                        sair = true;
-                        break;
-                    case ALLEGRO_KEY_SPACE:
-                        keys[SPACE] = true;
-                        curframe = 0;
-                        break;
-                }
-            }
-            else if(ev.type == ALLEGRO_EVENT_KEY_UP)
-            {
-                switch(ev.keyboard.keycode)
-                {
-                    case ALLEGRO_KEY_UP:    
-                        keys[UP] = false;
-                        break;
-                    case ALLEGRO_KEY_DOWN:
-                        keys[DOWN] = false;
-                        break;
-                    case ALLEGRO_KEY_LEFT:
-                        keys[LEFT] = false;
-                        break;
-                    case ALLEGRO_KEY_RIGHT:
-                        keys[RIGHT] = false;
-                        break;
-                    case ALLEGRO_KEY_ESCAPE:
-                        sair = true;
-                        break;
-                    case ALLEGRO_KEY_SPACE:
-                        keys[SPACE] = true;
-                        break;
-                } 
-            }
+
+            	if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+            	{
+                	switch(ev.keyboard.keycode)
+                	{
+                    	case ALLEGRO_KEY_UP:    
+                        	keys[UP] = true;
+                        	break;
+                    	case ALLEGRO_KEY_DOWN:
+                        	keys[DOWN] = true;
+                        	break;
+                    	case ALLEGRO_KEY_LEFT:
+                        	pos -= 1;
+                        	break;
+                    	case ALLEGRO_KEY_RIGHT:
+                        	pos += 1;
+                        	break;
+                    	case ALLEGRO_KEY_ESCAPE:
+                        	sair = true;
+                        	break;
+                    	case ALLEGRO_KEY_SPACE:
+                        	keys[SPACE] = true;
+                        	curframe = 0;
+                        	break;
+                	}
+            	}
+            	else if(ev.type == ALLEGRO_EVENT_KEY_UP)
+            	{
+                	switch(ev.keyboard.keycode)
+                	{
+                    	case ALLEGRO_KEY_UP:    
+                        	keys[UP] = false;
+                        	break;
+                    	case ALLEGRO_KEY_DOWN:
+                        	keys[DOWN] = false;
+                        	break;
+                    	case ALLEGRO_KEY_LEFT:
+                        	keys[LEFT] = false;
+                        	break;
+                    	case ALLEGRO_KEY_RIGHT:
+                        	keys[RIGHT] = false;
+                        	break;
+                    	case ALLEGRO_KEY_ESCAPE:
+                        	sair = true;
+                        	break;
+                    	case ALLEGRO_KEY_SPACE:
+                        	keys[SPACE] = true;
+                        	break;
+                	} 
+            	}
+            }  
             else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
             {
                if (estado == MENU)
