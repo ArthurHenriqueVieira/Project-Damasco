@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO};
@@ -297,10 +297,13 @@ int main(void)
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
+    al_destroy_bitmap(Jake);
     al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
     al_destroy_bitmap(ThrowJake);
     al_destroy_bitmap(Flame);
+    al_destroy_bitmap(Fireball);
+    al_destroy_bitmap(Bomb);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
@@ -393,8 +396,8 @@ void resetarTela()
 void desenharImagens()
 {
     // Desenha as linhas do plano cartesiano
-    al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
-    al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
+    //al_draw_line(1150, 500, 200, 500,al_map_rgb(0,0,0), 3);
+    //al_draw_line(250, 550, 250, 50,al_map_rgb(0,0,0), 3);
 }
 void desenharBotoes(bool equacao[3])
 {
@@ -483,8 +486,12 @@ void InitBullet(Bullet *bullet)
 
 void DrawBullet(Bullet *bullet)
 {
-    if(bullet->live)
-        al_draw_filled_circle(bullet->x, bullet->y, 15, al_map_rgb(255,255,255));
+    if(bullet->live && a == 0 && b != 0)
+        al_draw_bitmap(Fireball, bullet->x -50, bullet->y - 50, 0);
+    else if(bullet->live && a != 0)
+        al_draw_bitmap(Bomb, bullet->x -40, bullet->y -30, 0);
+    else if(bullet->live && a == 0 && b == 0)
+        al_draw_bitmap(Jake, bullet->x -25, bullet->y -23, 0);
 }
 
 void FireBullet(Bullet *bullet, Character *FinnJake)
@@ -511,7 +518,7 @@ void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
         bullet->x = posicaoX;
         bullet->y = posicaoY;
 
-        *posicao += 0.015;
+        *posicao += 0.02;
     }
 }
 
@@ -689,9 +696,13 @@ bool inicializar()
     image2 = al_load_bitmap("chas2.jpg");
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
+    Jake = al_load_bitmap("Jake.png");
     FinnBomb = al_load_bitmap("FinnBomb.png");
     Flame = al_load_bitmap("Flame.png");
     ThrowJake = al_load_bitmap("ThrowJake.png");
+    Fireball = al_load_bitmap("Fireball.png");
+    Bomb = al_load_bitmap("Bomb.png");
+
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
 
     font = al_load_font("04B_30__.ttf", 30, 0);
