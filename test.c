@@ -187,7 +187,7 @@ int main(void)
                     }else over3 = false;
                }
             }
-
+            // aqui ele identifica o clique do mouse no menu, esta em ordem Jogar, Tutorial e Sair
             if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
             {
                 if (estado == MENU){
@@ -206,9 +206,10 @@ int main(void)
             if(pos == 0){
                 count++;
                 if (count >= 10){
+                    count = 0;
                     a += keys[UP]*1;
                     a -= keys[DOWN]*1;    
-                }    
+                }
             }
 
             else if(pos == 1){
@@ -419,7 +420,7 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
     {
         if(++framecount >= 10)
         {
-            if(++curframe >= 15)
+            if(++curframe >= 14)
             {
                 FireBullet(&bullets, &FinnJake);
                 keys[SPACE] = false;
