@@ -118,7 +118,7 @@ int main(void)
                  render = true;
             }
 
-            if(!keys[SPACE] && !bullets.live)
+            if(!keys[SPACE] && !bullets.live && estado == JOGO)
             {
 
             	if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -224,6 +224,9 @@ int main(void)
 
             else if(pos == 2){
                 count++;
+                if(c > 9) c = 9;
+                if(c < -2) c = -2;
+
                 if (count >= 10){
                     count = 0;
                     c += keys[UP]*1;
