@@ -97,7 +97,7 @@ int main(void)
     y = 0;
 
     inicializarAlvos(listaDeAlvos);
-    mudarEstado(&estado, JOGO);
+    mudarEstado(&estado, MENU);
  
     if (!inicializar())
     {
@@ -117,7 +117,7 @@ int main(void)
                  render = true;
             }
 
-            if(!bullets.live)
+            if(!keys[SPACE] && !bullets.live)
             {
 
             	if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
@@ -170,7 +170,7 @@ int main(void)
                 	} 
             	}
             }  
-            else if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
+            if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
             {
                if (estado == MENU)
                {
@@ -187,12 +187,21 @@ int main(void)
                     }else over3 = false;
                }
             }
+
+            if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
+            {
+                if (estado == MENU){
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
+                        mudarEstado(&estado, JOGO);
+                    else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390){}
+                        
+                    else if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
+                    sair = true;
+                }
+            }
             
-            if(pos < 0)
-                pos = 2;
-            
-            if(pos > 2)
-                pos = 0;
+            if(pos < 0) pos = 2;
+            if(pos > 2) pos = 0;
             
             if(pos == 0){
                 count++;
