@@ -30,7 +30,7 @@ ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainico
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
 
-enum ESTADO{MENU, TUTORIAL, JOGO, FIM};
+enum ESTADO{MENU, MENUFASES, TUTORIAL, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE, ENTER};
 
@@ -42,11 +42,13 @@ int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
 int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
-bool keys[6] = {false,false,false,false,false, false};
-bool Fire = false;
 int fase =0;
 int testCoordenada[100];
+int pontuacao;
 
+
+bool keys[6] = {false,false,false,false,false, false};
+bool Fire = false;
 bool posicaoInimigoY;
 
 //Variaveis Struct 
@@ -73,7 +75,7 @@ void DrawBullet(Bullet *bullet);
 void FireBullet(Bullet *bullet, Character *FinnJake);
 void UpdateBullet(Bullet *bullet,int a, int b, int c, float *posicao);
 // Alvos
-bool inicializarAlvos(Alvo alvos[]);
+bool inicializarAlvos(Alvo alvos[], int fase);
 void desenharAlvos(Alvo alvos[], int quantidade);
 void verificaColisao(Alvo alvos[], Bullet *bullet);
 void iniciararray(int scoordenadas[]);
@@ -92,7 +94,9 @@ void inicializaJogo()
     c = 0;
     x = 0;
     y = 0;
-    inicializarAlvos(listaDeAlvos);
+
+    pontuacao = 0;
+    inicializarAlvos(listaDeAlvos, fase);
 }
  
 int main(void)
@@ -100,7 +104,7 @@ int main(void)
     bool exit    = false;
     bool render  = false;
 
-    bool over = false, over2 = false, over3 = false;
+    bool over = false, over2 = false, over3 = false, over4 = false, over5 = false;
     
     bool equacoes[3] = {false, false, false};
     bool sair = false, end = false;
@@ -237,6 +241,28 @@ int main(void)
                         over3 = true;
                     }else over3 = false;
                }
+               else if (estado == MENUFASES)
+               {
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 250 && ev.mouse.y <= 290){
+                        over = true;
+                    }else over = false;
+
+                    if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 300 && ev.mouse.y <= 340){
+                        over2 = true;
+                    }else over2 = false;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 350 && ev.mouse.y <= 390){
+                        over3 = true;
+                    }else over3 = false;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440){
+                        over4 = true;
+                    }else over4 = false;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 450 && ev.mouse.y <= 490){
+                        over5 = true;
+                    }else over5 = false;
+               }
                else if (estado == FIM)
                {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340){
@@ -251,18 +277,36 @@ int main(void)
                 if (estado == MENU)
                 {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
-                        mudarEstado(&estado, JOGO);
+                        mudarEstado(&estado, MENUFASES);
                     else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390)
                         mudarEstado(&estado, TUTORIAL);
                     else if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
                     sair = true;
                 }
+                else if (estado == MENUFASES)
+                {
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 250 && ev.mouse.y <= 290)
+                        fase = 1;
+
+                    if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
+                        fase = 2;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 350 && ev.mouse.y <= 390)
+                        fase = 3;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
+                        fase = 4;
+
+                    if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 450 && ev.mouse.y <= 490)
+                        fase = 5;
+
+                    mudarEstado(&estado, JOGO);
+                }
                 else if (estado == FIM)
                 {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
                     {
-                        mudarEstado(&estado, JOGO);
-                        inicializarAlvos(listaDeAlvos);
+                        mudarEstado(&estado, MENUFASES);
                     }
                 }
             }
@@ -325,6 +369,31 @@ int main(void)
                 if(!over3)  
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
                 else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
+            }
+            else if (estado == MENUFASES)
+            {
+                al_draw_bitmap(menuBg, 0, 0, 0);
+                al_draw_bitmap(BMO, 110, -30, 0);
+
+                if(!over)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 250,ALLEGRO_ALIGN_CENTRE, "Fase 1");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 250,ALLEGRO_ALIGN_CENTRE, "Fase 1");
+        
+                if(!over2)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Fase 2");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 300,ALLEGRO_ALIGN_CENTRE, "Fase 2");
+        
+                if(!over3)  
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 350,ALLEGRO_ALIGN_CENTRE, "Fase 3");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 350,ALLEGRO_ALIGN_CENTRE, "Fase 3");
+
+                if(!over4)  
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Fase 4");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Fase 4");
+
+                if(!over5)  
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 450,ALLEGRO_ALIGN_CENTRE, "Fase 5");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 450,ALLEGRO_ALIGN_CENTRE, "Fase 5");
             }
             else if(estado == TUTORIAL)
             {
@@ -790,9 +859,18 @@ int main(void)
             {
                 al_draw_bitmap(menuBg, 0, 0, 0);
 
+                if (pontuacao == 250)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Muito Bom! SEMPRE jogue assim");
+                else if (pontuacao <= 200 && pontuacao >= 50)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Humn... Melhore sua resposta!");
+                else
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Triste");
+
+                al_draw_textf(font, al_map_rgb(0,0,0), 630, 200,ALLEGRO_ALIGN_CENTRE, "Score: %d", pontuacao);
+
                 if(!over)
-                    al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar Novamente");
-                else al_draw_text(font, al_map_rgb(255,255,255), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar Novamente");
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Escolher Fase");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 300,ALLEGRO_ALIGN_CENTRE, "Escolher Fase");
             }
             resetarTela();
         }
@@ -924,8 +1002,9 @@ void desenharBotoes(bool equacao[3])
 {
 
     al_set_target_bitmap(al_get_backbuffer(janela));
-        al_draw_text(font2, al_map_rgb(0,0,0), 630, 670, ALLEGRO_ALIGN_CENTRE, "2");
-        al_draw_textf(font, al_map_rgb(0,0,0), 640, 680, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
+    al_draw_text(font2, al_map_rgb(0,0,0), 630, 670, ALLEGRO_ALIGN_CENTRE, "2");
+    al_draw_textf(font, al_map_rgb(0,0,0), 640, 680, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
+    al_draw_textf(font, al_map_rgb(0,0,0), 680, 20, ALLEGRO_ALIGN_CENTRE, "Score = %d", pontuacao);
     
 }
 
@@ -1056,11 +1135,10 @@ void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
 //////
 // Metodos do Alvo
 //////
-bool inicializarAlvos(Alvo alvos[])
+bool inicializarAlvos(Alvo alvos[], int fase)
 {
 	int x1,x2,x3,x4,y1,y2,y3,y4;
 
-    fase++;
     if(fase==1){
         x1=testCoordenada[0];
         y1=testCoordenada[1];
@@ -1072,7 +1150,7 @@ bool inicializarAlvos(Alvo alvos[])
         y4=testCoordenada[7];
     }
 
-    if(fase==3){
+    if(fase==2){
         x1=testCoordenada[8];
         y1=testCoordenada[9];
         x2=testCoordenada[10];
@@ -1162,8 +1240,17 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
         {
             if (bullet->y > (valorY - alvos[i].tamanho) && bullet->y < (valorY + alvos[i].tamanho))
             {
-                alvos[i].acertado = true;
-                al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                if (alvos[i].acertado == false)
+                {
+                    alvos[i].acertado = true;
+                    
+                    if (alvos[i].ID == ALVOFINAL)
+                        pontuacao += 100;
+                    else
+                        pontuacao += 50;
+
+                    al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
+                }
             }
         }
     }
