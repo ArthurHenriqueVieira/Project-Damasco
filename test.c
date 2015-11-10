@@ -27,7 +27,7 @@ ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
-enum ESTADO{MENU, JOGO};
+enum ESTADO{MENU, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
@@ -74,6 +74,18 @@ void updateback(Background *fundo);
 void drawback(Background *fundo);
 // Estado
 void mudarEstado(int *estado, int novoEstado);
+
+void inicializaJogo()
+{
+    pos = 0; 
+    a = 0;
+    b = 0;
+    c = 0;
+    x = 0;
+    y = 0;
+
+    inicializarAlvos(listaDeAlvos);
+}
  
 int main(void)
 {
@@ -90,14 +102,6 @@ int main(void)
     int count = 0;
     int estado = -1;
 
-    pos = 0; 
-    a = 0;
-    b = 0;
-    c = 0;
-    x = 0;
-    y = 0;
-
-    inicializarAlvos(listaDeAlvos);
     mudarEstado(&estado, MENU);
  
     if (!inicializar())
@@ -187,17 +191,33 @@ int main(void)
                         over3 = true;
                     }else over3 = false;
                }
+               else if (estado == FIM)
+               {
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340){
+                        over = true;
+                    }else over = false;
+
+               }
             }
             // aqui ele identifica o clique do mouse no menu, esta em ordem Jogar, Tutorial e Sair
             if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
             {
-                if (estado == MENU){
+                if (estado == MENU)
+                {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
                         mudarEstado(&estado, JOGO);
                     else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390){}
                         
                     else if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
                     sair = true;
+                }
+                else if (estado == FIM)
+                {
+                    if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
+                    {
+                        mudarEstado(&estado, JOGO);
+                        inicializarAlvos(listaDeAlvos);
+                    }
                 }
             }
             
@@ -266,6 +286,11 @@ int main(void)
                 {
                     bullets.live = false;
                     posicao = 0;
+                    bullets.x = 0;
+                    bullets.y = 0;
+
+                    printf("Passou\n");
+                    mudarEstado(&estado, FIM);
                 }
 
                 drawback(&imagemDeFundo);
@@ -291,6 +316,14 @@ int main(void)
 
                 if (count == 10)
                     count = 0;
+            }
+            else if (estado == FIM)
+            {
+                al_draw_bitmap(menuBg, 0, 0, 0);
+
+                if(!over)
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar Novamente");
+                else al_draw_text(font, al_map_rgb(255,255,255), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar Novamente");
             }
             resetarTela();
         }
@@ -603,6 +636,11 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
 void mudarEstado(int *estado, int novoEstado)
 {
     *estado = novoEstado;
+
+    if (novoEstado == JOGO)
+    {
+        inicializaJogo();
+    }
 }
 
 bool inicializar()
