@@ -725,7 +725,7 @@ int main(void)
                 else if (pontuacao <= 200 && pontuacao >= 50)
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Humn... Melhore sua resposta!");
                 else
-                    al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Triste");
+                    al_draw_text(font, al_map_rgb(0,0,0), 630, 100,ALLEGRO_ALIGN_CENTRE, "Estude mais!!");
 
                 al_draw_textf(font, al_map_rgb(0,0,0), 630, 200,ALLEGRO_ALIGN_CENTRE, "Score: %d", pontuacao);
 
@@ -872,7 +872,7 @@ void desenharBotoes(bool equacao[3])
     al_set_target_bitmap(al_get_backbuffer(janela));
     al_draw_text(font2, al_map_rgb(0,0,0), 630, 670, ALLEGRO_ALIGN_CENTRE, "2");
     al_draw_textf(font, al_map_rgb(0,0,0), 640, 680, ALLEGRO_ALIGN_CENTRE, "F(x)= %dX + %dX + %d", a,b,c);
-    al_draw_textf(font, al_map_rgb(0,0,0), 680, 20, ALLEGRO_ALIGN_CENTRE, "Score = %d", pontuacao);
+    al_draw_textf(font, al_map_rgb(0,0,0), 1100, 20, ALLEGRO_ALIGN_CENTRE, "Score = %d", pontuacao);
     
 }
 
@@ -964,8 +964,15 @@ void InitBullet(Bullet *bullet)
 
 void DrawBullet(Bullet *bullet)
 {
-    if(bullet->live && a == 0 && b != 0)
-        al_draw_bitmap(Fireball, bullet->x -50, bullet->y - 50, 0);
+
+    if(bullet->live && a == 0 && b != 0) {
+        if (b < 0)
+        {
+            al_draw_bitmap(Fireball, bullet->x -50, bullet->y - 50, ALLEGRO_FLIP_VERTICAL);
+        }
+        else
+            al_draw_bitmap(Fireball, bullet->x -50, bullet->y - 50, 0);
+    }
     else if(bullet->live && a != 0)
         al_draw_bitmap(Bomb, bullet->x -40, bullet->y -30, 0);
     else if(bullet->live && a == 0 && b == 0)
