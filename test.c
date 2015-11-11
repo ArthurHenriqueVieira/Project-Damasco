@@ -26,7 +26,7 @@ ALLEGRO_BITMAP *menuBg = NULL;
 ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL, *menuf = NULL, *Cloud = NULL, *Mountain = NULL;
 ALLEGRO_BITMAP *Seta = NULL, *Logo = NULL, *Fase = NULL, *bee = NULL;
 ALLEGRO_AUDIO_STREAM *musica2 = NULL, *Tut = NULL;
-ALLEGRO_SAMPLE *sample = NULL, *musica = NULL;
+ALLEGRO_SAMPLE *sample = NULL, *musica = NULL, *musicaJogo = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL, *FinnJK = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
@@ -343,7 +343,11 @@ int main(void)
                 }
             }
 
-            if(estado != MENU && estado != MENUFASES) al_stop_sample(&foo);
+            if(estado != MENU && estado != MENUFASES) {
+                al_stop_sample(&foo);
+
+                al_play_sample(musicaJogo, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, &foo);
+            }
 
             
             if(pos < 0) pos = 2;
@@ -770,6 +774,7 @@ int main(void)
     al_destroy_event_queue(fila_eventos);
     al_destroy_sample(musica);
     al_destroy_audio_stream(musica2);
+    al_destroy_audio_stream(musicaJogo);
     al_destroy_bitmap(Mountain);
     al_destroy_bitmap(Logo);
     al_destroy_bitmap(Fase);
@@ -1343,7 +1348,8 @@ bool inicializar()
         al_destroy_sample(sample);
         return false;
     }
-    musica = al_load_sample("Bit Rush.wav");
+    musicaJogo = al_load_sample("Bit Rush.wav");
+    musica = al_load_sample("Menu.ogg");
     sample = al_load_sample("palmas.ogg");
     Tut = al_load_audio_stream("Tuts.ogg", 4, 1024);
     if (!sample)
