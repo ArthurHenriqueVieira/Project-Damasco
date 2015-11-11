@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO, FIM};
@@ -35,7 +35,7 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
-int curframe = 0,curframeb = 0, framecount = 0, framedelay = 60;
+int curframe = 0,curframeb = 0,curframee = 0, framecount = 0,framecounte = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
 bool keys[5] = {false,false,false,false,false};
@@ -336,6 +336,7 @@ int main(void)
     al_destroy_bitmap(Finn);
     al_destroy_bitmap(Jake);
     al_destroy_bitmap(BMO);
+    al_destroy_bitmap(Gunter);
     al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
     al_destroy_bitmap(ThrowJake);
@@ -603,7 +604,13 @@ void desenharAlvos(Alvo alvos[], int quantidade)
             valorY = alvos[i].y;
 
             coordenadas(&valorX, &valorY);
-            al_draw_filled_circle(pegarValorEmX(alvos[i].x), pegarValorEmY(alvos[i].y), 15, al_map_rgb(255, 37, 189));
+        
+            if(++framecounte >= 80){
+                if(++curframee >= 2)
+                curframee = 0;
+            framecounte = 0;
+            }
+            al_draw_bitmap_region(Gunter, curframee * 64, 0, 64, 68, pegarValorEmX(alvos[i].x) - 32, pegarValorEmY(alvos[i].y) - 34, 1);
         }
     }
 }
@@ -741,6 +748,7 @@ bool inicializar()
     Finn = al_load_bitmap("Finn.png");
     Jake = al_load_bitmap("Jake.png");
     BMO = al_load_bitmap("BMO.png");
+    Gunter = al_load_bitmap("Gunter.png");
     FinnBomb = al_load_bitmap("FinnBomb.png");
     Flame = al_load_bitmap("Flame.png");
     ThrowJake = al_load_bitmap("ThrowJake.png");
