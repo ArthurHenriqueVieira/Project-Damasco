@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO, FIM};
@@ -35,7 +35,7 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
-int curframe = 0,curframeb = 0,curframee = 0, framecount = 0,framecounte = 0, framedelay = 60;
+int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, framecount = 0, framecountr = 0, framecounte = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
 bool keys[5] = {false,false,false,false,false};
@@ -304,6 +304,14 @@ int main(void)
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
                 desenharAlvos(listaDeAlvos, 4);
+                
+                if(++framecountr >= 15){
+                    if(++curframer >= 6)
+                        curframer = 0;
+                    framecountr = 0;
+                }
+                al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 700, 0, 1);
+                
                 if(Fire)
                     FireBullet(&bullets, &FinnJake);
 
@@ -337,6 +345,7 @@ int main(void)
     al_destroy_bitmap(Jake);
     al_destroy_bitmap(BMO);
     al_destroy_bitmap(Gunter);
+    al_destroy_bitmap(IceKing);
     al_destroy_bitmap(menuBg);
     al_destroy_bitmap(FinnBomb);
     al_destroy_bitmap(ThrowJake);
@@ -749,6 +758,7 @@ bool inicializar()
     Jake = al_load_bitmap("Jake.png");
     BMO = al_load_bitmap("BMO.png");
     Gunter = al_load_bitmap("Gunter.png");
+    IceKing = al_load_bitmap("IceKing.png");
     FinnBomb = al_load_bitmap("FinnBomb.png");
     Flame = al_load_bitmap("Flame.png");
     ThrowJake = al_load_bitmap("ThrowJake.png");
