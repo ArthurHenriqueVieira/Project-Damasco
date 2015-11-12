@@ -24,7 +24,7 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL,*LadyRainicorn = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO, FIM};
@@ -35,11 +35,14 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0;
-int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, framecount = 0, framecountr = 0, framecounte = 0, framedelay = 60;
+int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
+int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
 bool keys[5] = {false,false,false,false,false};
 bool Fire = false;
+
+bool posicaoInimigoY;
 
 //Variaveis Struct 
 Character FinnJake;
@@ -289,7 +292,6 @@ int main(void)
                     bullets.x = 0;
                     bullets.y = 0;
 
-                    printf("Passou\n");
                     mudarEstado(&estado, FIM);
                 }
 
@@ -304,13 +306,7 @@ int main(void)
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
                 desenharAlvos(listaDeAlvos, 4);
-                
-                if(++framecountr >= 15){
-                    if(++curframer >= 6)
-                        curframer = 0;
-                    framecountr = 0;
-                }
-                al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 700, 0, 1);
+
                 
                 if(Fire)
                     FireBullet(&bullets, &FinnJake);
@@ -343,6 +339,7 @@ int main(void)
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
     al_destroy_bitmap(Jake);
+    al_destroy_bitmap(LadyRainicorn);
     al_destroy_bitmap(BMO);
     al_destroy_bitmap(Gunter);
     al_destroy_bitmap(IceKing);
@@ -520,6 +517,16 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
         }
         al_draw_bitmap_region(Finn, curframe * framewidth, 0, framewidth, frameheight, FinnJake->x + 20, FinnJake->y - 30, 0);
     }
+
+    if(c > 0){
+        if(++framecountLady >= 30)
+            {
+                if(++curframeLady >= 15)
+                    curframeLady = 0;
+                framecountLady = 0;
+            }
+            al_draw_bitmap_region(LadyRainicorn, curframeLady * 282, 0, 282, 159, FinnJake->x -150 , FinnJake->y + 40, 0);
+    }
 }
 
 //////
@@ -613,13 +620,26 @@ void desenharAlvos(Alvo alvos[], int quantidade)
             valorY = alvos[i].y;
 
             coordenadas(&valorX, &valorY);
-        
-            if(++framecounte >= 80){
-                if(++curframee >= 2)
-                curframee = 0;
-            framecounte = 0;
+
+            if (alvos[i].ID == ALVOFINAL)
+            {
+                if(++framecountr >= 25){
+                    if(++curframer >= 6)
+                        curframer = 0;
+                    framecountr = 0;
+                }
+                al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, valorX - 84, valorY - 71,  1);
             }
-            al_draw_bitmap_region(Gunter, curframee * 64, 0, 64, 68, pegarValorEmX(alvos[i].x) - 32, pegarValorEmY(alvos[i].y) - 34, 1);
+            else {
+                if(++framecounte >= 65)
+                {
+                    if(++curframee >= 4)
+                        curframee = 0;
+                    framecounte = 0;
+                }
+
+                al_draw_bitmap_region(Gunter, curframee * 63, 0, 63, 68, valorX - 32, valorY - 34, 1);
+            }
         }
     }
 }
@@ -756,6 +776,7 @@ bool inicializar()
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
     Jake = al_load_bitmap("Jake.png");
+    LadyRainicorn = al_load_bitmap("LadyRainicorn.png");
     BMO = al_load_bitmap("BMO.png");
     Gunter = al_load_bitmap("Gunter.png");
     IceKing = al_load_bitmap("IceKing.png");
