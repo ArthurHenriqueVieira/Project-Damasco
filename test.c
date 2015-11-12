@@ -24,7 +24,8 @@ ALLEGRO_BITMAP *image = NULL;
 ALLEGRO_BITMAP *image2 = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL, *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL,*LadyRainicorn = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL; 
+ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL,*LadyRainicorn = NULL, *TreeHouse = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
 enum ESTADO{MENU, JOGO, FIM};
@@ -297,6 +298,7 @@ int main(void)
 
                 drawback(&imagemDeFundo);
                 al_draw_bitmap(image2, 0, 485, 0);
+                al_draw_bitmap(TreeHouse, -109, -120, 0);
                 desenharImagens();
                 desenharBotoes(equacoes);
                 segundograu(a, b, c, aux,&temp);
@@ -349,6 +351,7 @@ int main(void)
     al_destroy_bitmap(Flame);
     al_destroy_bitmap(Fireball);
     al_destroy_bitmap(Bomb);
+    al_destroy_bitmap(TreeHouse);
     al_destroy_display(janela);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
@@ -785,6 +788,7 @@ bool inicializar()
     ThrowJake = al_load_bitmap("ThrowJake.png");
     Fireball = al_load_bitmap("Fireball.png");
     Bomb = al_load_bitmap("Bomb.png");
+    TreeHouse = al_load_bitmap("TreeHouse.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
 
