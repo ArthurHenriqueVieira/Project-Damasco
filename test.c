@@ -20,8 +20,8 @@ ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
-ALLEGRO_BITMAP *image = NULL;
-ALLEGRO_BITMAP *image2 = NULL;
+ALLEGRO_BITMAP *image = NULL,*image2 = NULL;
+ALLEGRO_BITMAP *Seta = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL; 
@@ -308,6 +308,13 @@ int main(void)
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
                 desenharAlvos(listaDeAlvos, 4);
+                
+                if(pos == 0)
+                    al_draw_bitmap(Seta, 570, 640, 0);
+                else if(pos == 1)
+                    al_draw_bitmap(Seta, 685, 640, 0);
+                else if(pos == 2)
+                    al_draw_bitmap(Seta, 815, 640, 0);
 
                 
                 if(Fire)
@@ -353,6 +360,7 @@ int main(void)
     al_destroy_bitmap(Bomb);
     al_destroy_bitmap(TreeHouse);
     al_destroy_display(janela);
+    al_destroy_bitmap(Seta);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
  
@@ -522,7 +530,7 @@ void DrawCharacter(Character *FinnJake, Bullet *bullet)
     }
 
     if(c > 0){
-        if(++framecountLady >= 30)
+        if(++framecountLady >= 20)
             {
                 if(++curframeLady >= 15)
                     curframeLady = 0;
@@ -664,6 +672,7 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
             if (bullet->y > (valorY - alvos[i].tamanho) && bullet->y < (valorY + alvos[i].tamanho))
             {
                 alvos[i].acertado = true;
+                al_play_sample(sample, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_ONCE, NULL);
             }
         }
     }
@@ -789,6 +798,7 @@ bool inicializar()
     Fireball = al_load_bitmap("Fireball.png");
     Bomb = al_load_bitmap("Bomb.png");
     TreeHouse = al_load_bitmap("TreeHouse.png");
+    Seta = al_load_bitmap("Seta.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
 
