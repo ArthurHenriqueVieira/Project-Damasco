@@ -332,11 +332,19 @@ int main(void)
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
                     }
                     else if(prox == 3){
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Eu, BMO e voce temos");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Eu BMO, e voce temos");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "uma missao, voce precisa"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "me fornecer dados para");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "que eu possa dasr as");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "coordenadas do Rei.");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "que eu possa dar as");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                    }
+                    else if(prox == 4){
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "coordenadas do Rei e do");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "Gunter, pro Finn assim"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "acabando com essa lou-");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "cura a tempo de assarmos ");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "umas panquecas de bacon");
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
                     }
                     else{
