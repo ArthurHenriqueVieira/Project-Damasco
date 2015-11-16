@@ -20,22 +20,22 @@ ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
-ALLEGRO_BITMAP *image = NULL,*image2 = NULL;
+ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL;
 ALLEGRO_BITMAP *Seta = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL, *FinnBomb = NULL,*IceKing = NULL, *ThrowJake = NULL; 
-ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL, *Gunter = NULL,*LadyRainicorn = NULL, *TreeHouse = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL;
+ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
-enum ESTADO{MENU, JOGO, FIM};
+enum ESTADO{MENU, TUTORIAL, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
 
 // Variaveis
 int a,b,c,x,y;
-int pos,aux=1,temp=0;
+int pos,aux=1,temp=0, ct = 1280, prox = 0;
 int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
 int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
@@ -87,7 +87,6 @@ void inicializaJogo()
     c = 0;
     x = 0;
     y = 0;
-
     inicializarAlvos(listaDeAlvos);
 }
  
@@ -99,7 +98,7 @@ int main(void)
     bool over = false, over2 = false, over3 = false;
     
     bool equacoes[3] = {false, false, false};
-    bool sair = false;
+    bool sair = false, end = false;
 
     float posicao = 0;
 
@@ -179,6 +178,22 @@ int main(void)
                 	} 
             	}
             }  
+            else if(estado == TUTORIAL){
+                    if(ev.type == ALLEGRO_EVENT_KEY_DOWN)
+                    {
+                        switch(ev.keyboard.keycode)
+                        {
+                        case ALLEGRO_KEY_ESCAPE:
+                            sair = true;
+                            break;
+                        case ALLEGRO_KEY_SPACE:
+                            if(ct > 150) ct = 150;
+                            else prox += 1;
+                            break;
+                        }
+                    }
+                }
+
             if(ev.type == ALLEGRO_EVENT_MOUSE_AXES)
             {
                if (estado == MENU)
@@ -210,8 +225,8 @@ int main(void)
                 {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
                         mudarEstado(&estado, JOGO);
-                    else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390){}
-                        
+                    else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390)
+                        mudarEstado(&estado, TUTORIAL);
                     else if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
                     sair = true;
                 }
@@ -284,6 +299,89 @@ int main(void)
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
                 else al_draw_text(font, al_map_rgb(255,255,255), 630, 400,ALLEGRO_ALIGN_CENTRE, "Sair");
             }
+            else if(estado == TUTORIAL)
+            {
+                if(bullets.x > LARGURA_TELA || bullets.y > ALTURA_TELA)
+                {
+                    bullets.live = false;
+                    posicao = 0;
+                    bullets.x = 0;
+                    bullets.y = 0;
+                }
+
+                al_draw_bitmap(fundo, 0, 0, 0);
+                al_draw_bitmap(BMO, ct, 300, 0);
+
+                
+                if(ct-- <= 150){
+                    al_draw_bitmap(dialog, 400, 0, 0);
+                    ct = 150;
+
+                    if(prox == 1){
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "O Rei Gelado esta");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "tentando novamente"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "sequestrar todas as");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "princesas de Ooo.");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                    }
+                    else if(prox == 2){
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Finn e Jake estao");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "tentando derrota-lo"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "mas sem matematica e");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "impossivel!");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                    }
+                    else if(prox == 3){
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Eu, BMO e voce temos");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "uma missao, voce precisa"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "me fornecer dados para");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "que eu possa dasr as");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "coordenadas do Rei.");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                    }
+                    else{
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Ola, eu sou o BMO e vou");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "te explicar como podemos"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "ajudar Finn e Jake");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "a derrotar o Rei Gelado.");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "Vai ser Matematico! :D ");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Espaco"); 
+                    }
+                } 
+                
+                InitCharacter(&FinnJake, &c);
+                if(end){
+                    segundograu(a, b, c, aux, &temp);
+                    desenharBotoes(equacoes);
+                    DrawCharacter(&FinnJake, &bullets);
+                    desenharImagens();
+                    desenharAlvos(listaDeAlvos, 4);
+                    if(pos == 0)
+                        al_draw_bitmap(Seta, 570, 640, 0);
+                    else if(pos == 1)
+                        al_draw_bitmap(Seta, 690, 640, 0);
+                    else if(pos == 2)
+                        al_draw_bitmap(Seta, 820, 640, 0);
+                }
+                DrawBullet(&bullets);
+                verificaColisao(listaDeAlvos, &bullets);
+                UpdateBullet(&bullets, a, b, c, &posicao);
+                
+
+                
+                if(Fire)
+                    FireBullet(&bullets, &FinnJake);
+
+                if(temp<50)
+                    aux=1;
+                else if(temp>=50 && temp<100)
+                    aux=-1;
+                else
+                    temp=0;
+
+                if (count == 10)
+                    count = 0;
+            }
             else if (estado == JOGO)
             {
                 if(bullets.x > LARGURA_TELA || bullets.y > ALTURA_TELA)
@@ -301,7 +399,8 @@ int main(void)
                 al_draw_bitmap(TreeHouse, -109, -120, 0);
                 desenharImagens();
                 desenharBotoes(equacoes);
-                segundograu(a, b, c, aux,&temp);
+                if(!bullets.live && !keys[SPACE])
+                    segundograu(a, b, c, aux, &temp);
                 InitCharacter(&FinnJake, &c);
                 DrawCharacter(&FinnJake, &bullets);
                 DrawBullet(&bullets);
@@ -312,9 +411,9 @@ int main(void)
                 if(pos == 0)
                     al_draw_bitmap(Seta, 570, 640, 0);
                 else if(pos == 1)
-                    al_draw_bitmap(Seta, 685, 640, 0);
+                    al_draw_bitmap(Seta, 690, 640, 0);
                 else if(pos == 2)
-                    al_draw_bitmap(Seta, 815, 640, 0);
+                    al_draw_bitmap(Seta, 820, 640, 0);
 
                 
                 if(Fire)
@@ -344,6 +443,7 @@ int main(void)
 
     al_destroy_font(font2);
     al_destroy_font(font);
+    al_destroy_bitmap(fundo);
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
@@ -361,6 +461,7 @@ int main(void)
     al_destroy_bitmap(TreeHouse);
     al_destroy_display(janela);
     al_destroy_bitmap(Seta);
+    al_destroy_bitmap(dialog);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
  
@@ -799,6 +900,8 @@ bool inicializar()
     Bomb = al_load_bitmap("Bomb.png");
     TreeHouse = al_load_bitmap("TreeHouse.png");
     Seta = al_load_bitmap("Seta.png");
+    fundo = al_load_bitmap("oi.jpg");
+    dialog= al_load_bitmap("dialog.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
 
@@ -810,7 +913,7 @@ bool inicializar()
         return -1;
     }
 
-    font2 = al_load_font("04B_30__.ttf", 25, 0);
+    font2 = al_load_font("04B_30__.ttf", 15, 0);
     if(!font2)
     {
         al_destroy_display(janela);
