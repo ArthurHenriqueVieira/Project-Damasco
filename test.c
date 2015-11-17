@@ -25,8 +25,8 @@ ALLEGRO_BITMAP *Seta = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL;
-ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL;
-ALLEGRO_FONT *font = NULL, *font2 = NULL;
+ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
+ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
 
 enum ESTADO{MENU, TUTORIAL, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
@@ -343,7 +343,7 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Gunter, para que os");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "meninos acabem com"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "essa loucura e ainda");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "sobrar tempo pra comer");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "sobre tempo pra comer");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "umas panquecas de bacon");
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
                         al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0);  
@@ -363,10 +363,31 @@ int main(void)
                         if(++framecountr >= 25){
                             if(++curframer >= 6)
                                 curframer = 0;
-                        framecountr = 0;if(cr >= 900) cr = 900;
+                        framecountr = 0;
                         }
                         al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, cr, 20,  1);
                         al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, cf, 200, 180, 360, 0);
+                        al_draw_text(font3, al_map_rgb(0,0,0), 100, 570, 0, "A wild IceKing appeared!");
+                        if(cr == 900 && cf == 150){
+                            al_draw_bitmap(hp, 600, 300, 0);
+                            al_draw_bitmap(hp2, 50, 50, 0);
+                            al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        }
+                    }
+                    else if(prox == 7){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
                     }
                     else{
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Ola, eu sou o BMO e vou");
@@ -470,8 +491,11 @@ int main(void)
         }
     }
 
-    al_destroy_font(font2);
     al_destroy_font(font);
+    al_destroy_font(font2);
+    al_destroy_bitmap(hp);
+    al_destroy_bitmap(hp2);
+    al_destroy_font(font3);
     al_destroy_bitmap(fundo);
     al_destroy_bitmap(pkfundo);
     al_destroy_sample(sample);
@@ -935,10 +959,15 @@ bool inicializar()
     fundo = al_load_bitmap("oi.jpg");
     pkfundo = al_load_bitmap("pkfundo.jpg");
     dialog= al_load_bitmap("dialog.png");
+    hp = al_load_bitmap("life.png");
+    hp2 = al_load_bitmap("life2.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
-
+    
     font = al_load_font("04B_30__.ttf", 30, 0);
+    font2 = al_load_font("04B_30__.ttf", 15, 0);
+    font3 = al_load_font("Pokemon GB.ttf", 30, 0);
+    
     if(!font)
     {
         al_destroy_display(janela);
@@ -946,7 +975,6 @@ bool inicializar()
         return -1;
     }
 
-    font2 = al_load_font("04B_30__.ttf", 15, 0);
     if(!font2)
     {
         al_destroy_display(janela);
