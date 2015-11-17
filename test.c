@@ -20,11 +20,11 @@ ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
-ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL;
+ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL;
 ALLEGRO_BITMAP *Seta = NULL;
 ALLEGRO_AUDIO_STREAM *musica = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL;
 
@@ -35,7 +35,7 @@ enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
 
 // Variaveis
 int a,b,c,x,y;
-int pos,aux=1,temp=0, ct = 1280, prox = 0;
+int pos,aux=1,temp=0, ct = 1280, cr = -50, cf = 1280, prox = 0;
 int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
 int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
@@ -312,8 +312,8 @@ int main(void)
                 al_draw_bitmap(fundo, 0, 0, 0);
                 al_draw_bitmap(BMO, ct, 300, 0);
 
-                
-                if(ct-- <= 150){
+                ct -= 2;
+                if(ct <= 150){
                     al_draw_bitmap(dialog, 400, 0, 0);
                     ct = 150;
 
@@ -336,16 +336,37 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "uma missao, voce precisa"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "me fornecer dados para");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "que eu possa dar as");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "coordenadas do Rei e do");
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
                     }
                     else if(prox == 4){
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "coordenadas do Rei e do");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "Gunter, pro Finn assim"); 
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "acabando com essa lou-");
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "cura a tempo de assarmos ");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Gunter, para que os");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "meninos acabem com"); 
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "essa loucura e ainda");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "sobrar tempo pra comer");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "umas panquecas de bacon");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                        al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0);  
+                    }
+                    else if(prox == 5){
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "E simples, olhe para o");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "meu display!");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                        al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0); 
+                    }
+                    else if(prox == 6){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        cr += 2;
+                        cf -= 2;
+                        if(cr >= 900) cr = 900;
+                        if(cf <= 150) cf = 150; 
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;if(cr >= 900) cr = 900;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, cr, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, cf, 200, 180, 360, 0);
                     }
                     else{
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Ola, eu sou o BMO e vou");
@@ -452,9 +473,11 @@ int main(void)
     al_destroy_font(font2);
     al_destroy_font(font);
     al_destroy_bitmap(fundo);
+    al_destroy_bitmap(pkfundo);
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
+    al_destroy_bitmap(finn2);
     al_destroy_bitmap(Jake);
     al_destroy_bitmap(LadyRainicorn);
     al_destroy_bitmap(BMO);
@@ -723,7 +746,7 @@ bool inicializarAlvos(Alvo alvos[])
     alvos[3].ID = ALVOFINAL;
     alvos[3].x = 6;
     alvos[3].y = 0;
-    alvos[3].tamanho = 15;
+    alvos[3].tamanho = 75;
     alvos[3].acertado = false;
 }
 
@@ -896,6 +919,7 @@ bool inicializar()
     image2 = al_load_bitmap("chas2.jpg");
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
+    finn2 = al_load_bitmap("finntut.png");
     Jake = al_load_bitmap("Jake.png");
     LadyRainicorn = al_load_bitmap("LadyRainicorn.png");
     BMO = al_load_bitmap("BMO.png");
@@ -909,6 +933,7 @@ bool inicializar()
     TreeHouse = al_load_bitmap("TreeHouse.png");
     Seta = al_load_bitmap("Seta.png");
     fundo = al_load_bitmap("oi.jpg");
+    pkfundo = al_load_bitmap("pkfundo.jpg");
     dialog= al_load_bitmap("dialog.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
