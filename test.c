@@ -8,6 +8,8 @@
 #include <allegro5/allegro_acodec.h>
 #include "objects.h"
  
+#include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
@@ -749,27 +751,74 @@ void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
 //////
 bool inicializarAlvos(Alvo alvos[])
 {
+	int tipo, a,b,c;
+	float x1,x2,x3,x4,y1,y2,y3,y4;
+	srand((unsigned)time(NULL));
+	tipo = rand() % 3;
+
+	x1 = rand() % 26;
+	x1/=10;
+	x2 = 25 + (rand() % 26);
+	x2/=10;
+	x3 = 50 + (rand() % 26);
+	x3/=10;
+	x4 = 75 + (rand() % 16);
+	x4/=10;
+     
+    do{
+		a= (rand() % 5) -1;
+	}while(a==0);
+
+    do{
+		b= (rand() % 5) -1;
+	}while(b==0);
+
+    do{
+		c= (rand() % 11) -1;
+	}while(c==0);
+
+	if(tipo==0){
+    	y1=c;
+    	y2=c;
+    	y3=c;
+    	y4=c;
+    	a=0;
+    	b=0;
+	}	
+	else if(tipo==1){
+		y1=(x1*b)+c;
+    	y2=(x2*b)+c;
+    	y3=(x3*b)+c;
+    	y4=(x4*b)+c;
+    	a=0;
+	}
+	else if(tipo==2){
+	    y1=(a*(x1*x1))+(x1*b)+c;
+    	y2=(a*(x2*x2))+(x2*b)+c;
+    	y3=(a*(x3*x3))+(x3*b)+c;
+    	y4=(a*(x4*x4))+(x4*b)+c;
+	}
     alvos[0].ID = ALVO;
-    alvos[0].x = 1;
-    alvos[0].y = 5;
+    alvos[0].x = x1;
+    alvos[0].y = y1;
     alvos[0].tamanho = 15;
     alvos[0].acertado = false;
 
     alvos[1].ID = ALVO;
-    alvos[1].x = 3;
-    alvos[1].y = 9;
+    alvos[1].x = x2;
+    alvos[1].y = y2;
     alvos[1].tamanho = 15;
     alvos[1].acertado = false;
 
     alvos[2].ID = ALVO;
-    alvos[2].x = 5;
-    alvos[2].y = 5;
+    alvos[2].x = x3;
+    alvos[2].y = y3;
     alvos[2].tamanho = 15;
     alvos[2].acertado = false;
 
     alvos[3].ID = ALVOFINAL;
-    alvos[3].x = 6;
-    alvos[3].y = 0;
+    alvos[3].x = x4;
+    alvos[3].y = y4;
     alvos[3].tamanho = 75;
     alvos[3].acertado = false;
 }
@@ -833,6 +882,7 @@ void verificaColisao(Alvo alvos[], Bullet *bullet)
         }
     }
 }
+
 
 //////
 // Metodos do estado
