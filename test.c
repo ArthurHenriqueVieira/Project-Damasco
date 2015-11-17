@@ -22,9 +22,9 @@ ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
-ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL;
+ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL;
 ALLEGRO_BITMAP *Seta = NULL;
-ALLEGRO_AUDIO_STREAM *musica = NULL;
+ALLEGRO_AUDIO_STREAM *musica = NULL, *musica2 = NULL;
 ALLEGRO_SAMPLE *sample = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
@@ -32,17 +32,17 @@ ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
 
 enum ESTADO{MENU, TUTORIAL, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
-enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE};
+enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE, ENTER};
 
 
 // Variaveis
 int a,b,c,x,y;
-int pos,aux=1,temp=0, ct = 1280, cr = -50, cf = 1280, prox = 0;
+int pos,aux=1,temp=0, ct = 1280, cr = -50, cf = 1280, prox = 0, i = 0;
 int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
 int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
-bool keys[5] = {false,false,false,false,false};
+bool keys[6] = {false,false,false,false,false, false};
 bool Fire = false;
 
 bool posicaoInimigoY;
@@ -185,14 +185,48 @@ int main(void)
                     {
                         switch(ev.keyboard.keycode)
                         {
+                        case ALLEGRO_KEY_UP:    
+                            pos -= 1;
+                            break;
+                        case ALLEGRO_KEY_DOWN:
+                            pos += 1;
+                            break;
                         case ALLEGRO_KEY_ESCAPE:
                             sair = true;
                             break;
-                        case ALLEGRO_KEY_SPACE:
+                        case ALLEGRO_KEY_ENTER:
                             if(ct > 150) ct = 150;
                             else prox += 1;
+                            keys[ENTER] = true;
                             break;
                         }
+                    }
+                    else if(ev.type == ALLEGRO_EVENT_KEY_UP)
+                    {
+                        switch(ev.keyboard.keycode)
+                        {
+                            case ALLEGRO_KEY_UP:    
+                                keys[UP] = false;
+                                break;
+                            case ALLEGRO_KEY_DOWN:
+                                keys[DOWN] = false;
+                                break;
+                            case ALLEGRO_KEY_LEFT:
+                                keys[LEFT] = false;
+                                break;
+                            case ALLEGRO_KEY_RIGHT:
+                                keys[RIGHT] = false;
+                                break;
+                            case ALLEGRO_KEY_ESCAPE:
+                                sair = true;
+                                break;
+                            case ALLEGRO_KEY_SPACE:
+                                keys[SPACE] = false;
+                                break;
+                            case ALLEGRO_KEY_ENTER:
+                                keys[ENTER] = false;
+                                break;
+                        } 
                     }
                 }
 
@@ -315,6 +349,7 @@ int main(void)
                 al_draw_bitmap(BMO, ct, 300, 0);
 
                 ct -= 2;
+                if(prox >= 7) prox = 7;
                 if(ct <= 150){
                     al_draw_bitmap(dialog, 400, 0, 0);
                     ct = 150;
@@ -324,22 +359,22 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "tentando novamente"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "sequestrar todas as");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "princesas de Ooo.");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");
                     }
                     else if(prox == 2){
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Finn e Jake estao");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "tentando derrota-lo"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "mas sem matematica e");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "impossivel!");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");  
                     }
                     else if(prox == 3){
-                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Eu BMO, e voce temos");
+                        al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Eu BMO e voce temos");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "uma missao, voce precisa"); 
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "me fornecer dados para");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "que eu possa dar as");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "coordenadas do Rei e do");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");  
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");  
                     }
                     else if(prox == 4){
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Gunter, para que os");
@@ -347,17 +382,20 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "essa loucura e ainda");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "sobre tempo pra comer");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "umas panquecas de bacon");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");
                         al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0);  
                     }
                     else if(prox == 5){
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "E simples, olhe para o");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "meu display!");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "aperte Espaco");
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");
                         al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0); 
+                        al_set_audio_stream_playing(musica, false);
+                        al_attach_audio_stream_to_mixer(musica2, al_get_default_mixer());
                     }
                     else if(prox == 6){
                         al_draw_bitmap(pkfundo, 0,0,0);
+                        al_set_audio_stream_playing(musica2, true);
                         cr += 2;
                         cf -= 2;
                         if(cr >= 900) cr = 900;
@@ -369,7 +407,8 @@ int main(void)
                         }
                         al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, cr, 20,  1);
                         al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, cf, 200, 180, 360, 0);
-                        al_draw_text(font3, al_map_rgb(0,0,0), 100, 570, 0, "A wild IceKing appeared!");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 100, 570, 0, "A wild ICEKING");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 70, 620, 0, "appeared!");
                         if(cr == 900 && cf == 150){
                             al_draw_bitmap(hp, 600, 300, 0);
                             al_draw_bitmap(hp2, 50, 50, 0);
@@ -390,6 +429,49 @@ int main(void)
                         al_draw_bitmap(hp2, 50, 50, 0);
                         al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
                         al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_scaled_bitmap(aba, 0, 0, 1280, 442, 580, 285, 700, 430, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 540, 0, "FIGHT");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 590, 0, "PLAY");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 640, 0, "RUN");
+
+                        if(pos == 0){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 545, -80.09, -1); 
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 540, 0, "Neste modo, te");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "ensino sobre pode-");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 640, 0, "res matematicos");  
+                        }
+                        else if(pos == 1){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 595, -80.09, -1);
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 540, 0, "Ja aprendeu tudo?");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "entao HORA DE ");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 640, 0, "AVENTURA!");  
+                        }
+                        else if(pos == 2){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 645, -80.09, -1);
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 540, 0, "Deseja voltar");
+                            al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "pro menu? ok!");
+                        }
+
+                        if(pos == 0 && keys[ENTER] && i >= 100){
+                            al_draw_scaled_bitmap(aba, 0, 0, 1280, 442, 300, 285, 1000, 430, 0);
+                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 540, 0, "Lancar Bomba(2 grau)");
+                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 590, 0, "Espada de fogo(1 grau)");
+                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 640, 0, "Lancar Jake(Constante)");
+                        }else if(pos == 1 && keys[ENTER] && i >= 100){
+                            mudarEstado(&estado, JOGO);
+                            al_set_audio_stream_playing(musica2, false);
+                            pos = 0;
+                        }else if(pos == 2 && keys[ENTER] && i >= 100){
+                            mudarEstado(&estado, MENU);
+                            al_set_audio_stream_playing(musica2, false);
+                            al_set_audio_stream_playing(musica, true);
+                            i = 0;
+                            prox = 0;
+                            ct = 1280;
+                            cr = -50; 
+                            cf = 1280;
+                        }
+                        i += 1;
                     }
                     else{
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Ola, eu sou o BMO e vou");
@@ -397,7 +479,7 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "ajudar Finn e Jake");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 200, 0, "a derrotar o Rei Gelado.");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 250, 0, "Vai ser Matematico! :D ");
-                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Espaco"); 
+                        al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter"); 
                     }
                 } 
                 
@@ -418,8 +500,6 @@ int main(void)
                 DrawBullet(&bullets);
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
-                
-
                 
                 if(Fire)
                     FireBullet(&bullets, &FinnJake);
@@ -497,6 +577,7 @@ int main(void)
     al_destroy_font(font2);
     al_destroy_bitmap(hp);
     al_destroy_bitmap(hp2);
+    al_destroy_bitmap(aba);
     al_destroy_font(font3);
     al_destroy_bitmap(fundo);
     al_destroy_bitmap(pkfundo);
@@ -521,6 +602,7 @@ int main(void)
     al_destroy_bitmap(dialog);
     al_destroy_event_queue(fila_eventos);
     al_destroy_audio_stream(musica);
+    al_destroy_audio_stream(musica2);
  
     return 0;
 }
@@ -966,6 +1048,7 @@ bool inicializar()
     }
 
     musica = al_load_audio_stream("bits.ogg", 4, 1024);
+    musica2 = al_load_audio_stream("Pokemon.ogg", 4, 1024);
     if (!musica)
     {
         fprintf(stderr, "Falha ao carregar audio.\n");
@@ -1011,6 +1094,7 @@ bool inicializar()
     dialog= al_load_bitmap("dialog.png");
     hp = al_load_bitmap("life.png");
     hp2 = al_load_bitmap("life2.png");
+    aba = al_load_bitmap("aba.png");
 
     initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
     
@@ -1035,6 +1119,7 @@ bool inicializar()
     al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
     al_set_audio_stream_playing(musica, true);
     
+    al_reserve_samples(1);
     menuBg = al_load_bitmap("menu.jpg");
     timer = al_create_timer(1.0/60);
 
