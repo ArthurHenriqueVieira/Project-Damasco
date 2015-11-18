@@ -190,39 +190,24 @@ int main(void)
                             break;
                         case ALLEGRO_KEY_DOWN:
                             pos += 1;
+                            keys[SPACE] = false;
                             break;
                         case ALLEGRO_KEY_ESCAPE:
                             sair = true;
+                            keys[SPACE] = false;
                             break;
                         case ALLEGRO_KEY_ENTER:
                             if(ct > 150) ct = 150;
                             else prox += 1;
                             keys[ENTER] = true;
+                            keys[SPACE] = true;
                             break;
                         }
                     }
                     else if(ev.type == ALLEGRO_EVENT_KEY_UP)
                     {
                         switch(ev.keyboard.keycode)
-                        {
-                            case ALLEGRO_KEY_UP:    
-                                keys[UP] = false;
-                                break;
-                            case ALLEGRO_KEY_DOWN:
-                                keys[DOWN] = false;
-                                break;
-                            case ALLEGRO_KEY_LEFT:
-                                keys[LEFT] = false;
-                                break;
-                            case ALLEGRO_KEY_RIGHT:
-                                keys[RIGHT] = false;
-                                break;
-                            case ALLEGRO_KEY_ESCAPE:
-                                sair = true;
-                                break;
-                            case ALLEGRO_KEY_SPACE:
-                                keys[SPACE] = false;
-                                break;
+                        { 
                             case ALLEGRO_KEY_ENTER:
                                 keys[ENTER] = false;
                                 break;
@@ -452,7 +437,7 @@ int main(void)
                             al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "pro menu? ok!");
                         }
 
-                        if(pos == 0 && keys[ENTER] && i >= 100){
+                        if(pos == 0 && keys[SPACE] && i >= 500){
                             al_draw_scaled_bitmap(aba, 0, 0, 1280, 442, 300, 285, 1000, 430, 0);
                             al_draw_text(font3,al_map_rgb(0,0,0), 400, 540, 0, "Lancar Bomba(2 grau)");
                             al_draw_text(font3,al_map_rgb(0,0,0), 400, 590, 0, "Espada de fogo(1 grau)");
