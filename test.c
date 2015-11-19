@@ -186,21 +186,18 @@ int main(void)
                         switch(ev.keyboard.keycode)
                         {
                         case ALLEGRO_KEY_UP:    
-                            pos -= 1;
+                                pos -= 1;
                             break;
                         case ALLEGRO_KEY_DOWN:
                             pos += 1;
-                            keys[SPACE] = false;
                             break;
                         case ALLEGRO_KEY_ESCAPE:
                             sair = true;
-                            keys[SPACE] = false;
                             break;
                         case ALLEGRO_KEY_ENTER:
                             if(ct > 150) ct = 150;
-                            else prox += 1;
+                            if(prox != 7) prox += 1;
                             keys[ENTER] = true;
-                            keys[SPACE] = true;
                             break;
                         }
                     }
@@ -334,7 +331,6 @@ int main(void)
                 al_draw_bitmap(BMO, ct, 300, 0);
 
                 ct -= 2;
-                if(prox >= 7) prox = 7;
                 if(ct <= 150){
                     al_draw_bitmap(dialog, 400, 0, 0);
                     ct = 150;
@@ -437,11 +433,8 @@ int main(void)
                             al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "pro menu? ok!");
                         }
 
-                        if(pos == 0 && keys[SPACE] && i >= 500){
-                            al_draw_scaled_bitmap(aba, 0, 0, 1280, 442, 300, 285, 1000, 430, 0);
-                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 540, 0, "Lancar Bomba(2 grau)");
-                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 590, 0, "Espada de fogo(1 grau)");
-                            al_draw_text(font3,al_map_rgb(0,0,0), 400, 640, 0, "Lancar Jake(Constante)");
+                        if(pos == 0 && keys[ENTER] && i >= 100){
+                            prox++;
                         }else if(pos == 1 && keys[ENTER] && i >= 100){
                             mudarEstado(&estado, JOGO);
                             al_set_audio_stream_playing(musica2, false);
@@ -458,6 +451,244 @@ int main(void)
                         }
                         i += 1;
                     }
+                    else if(prox == 8){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "Para lutar precisamos, usar uma");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "funcao polinomial de ate grau dois");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "ax2+bx+c onde a,b e c sao os parametros.");
+                    }
+                    else if(prox == 9){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "Atraves das setas do teclado voce");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "pode alterar os parametros da funcao,");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "as setas da esquerda e direita alternam");
+                    }
+                    else if(prox == 10){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "Entre os Parametros a, b e c enquanto");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "cima e baixo somam ou subtraem uma");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "unidade ao parametro escolhido.");
+                    }
+                    else if(prox == 11){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "Ah e a tecla espaco sinaliza Finn");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "que os parametros estao certos para");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "atirar e acertar o Rei.");
+                    }
+                    else if(prox == 12){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "Antes de voce usar o que te ");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "ensinei, vamos ver o comportamento");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "das funcoes.");
+                    }
+                    else if(prox == 13){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_scaled_bitmap(aba, 0, 0, 1280, 442, 580, 285, 700, 430, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 540, 0, "Lancar Bomba");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 590, 0, "Espada de fogo");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 700, 640, 0, "Lancar Jake");
+
+                        if(pos == 0){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 545, -80.09, -1); 
+                            segundograu(-1, 6, 2, aux, &temp);  
+                        }
+                        else if(pos == 1){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 595, -80.09, -1);
+                            segundograu(0, 1, 2, aux, &temp);  
+                        }
+                        else if(pos == 2){
+                            al_draw_rotated_bitmap(Seta, 26.50, 21, 670, 645, -80.09, -1);
+                            segundograu(0, 0, 2, aux, &temp); 
+                        }
+                    }
+                    else if(prox == 14){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "As equacoes constante, de 1 e 2 grau");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "sao ensinadas separadamente porem elas sao");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "uma funcao so, a constante por exemplo");
+                        
+                    }
+                    else if(prox == 15){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "tem polinomios de grau 1, 2, 3 e ate n,");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "porem eles estao acompanhados de parametros");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "nulos restando apenas um parametro");
+                        
+                    }
+                    else if(prox == 16){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "acompanhadode x elevado a 0, isso nao");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "e magico? Quando voce altera um parametro a sua");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "funcao adota um comportamento diferente");
+                        
+                    }
+                    else if(prox == 16){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "a se maior que 0, faz uma parabola com");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "concavidade para cima, do contrario sua");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "a concavidade fica para baixo.");
+                    }
+                    else if(prox == 17){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "b altera o angulo da reta formada");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, " ou em 2 grau alterando o tamanho");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "da parabola.");
+                    }
+                    else if(prox == 18){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "e c indica quando a funcao toca");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "no eixo y, no jogo c vai movimentar");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "Finn no eixo y!");
+                    }
+                    else if(prox == 18){
+                        al_draw_bitmap(pkfundo, 0,0,0);
+                        if(++framecountr >= 25){
+                            if(++curframer >= 6)
+                                curframer = 0;
+                        framecountr = 0;
+                        }
+                        al_draw_bitmap_region(IceKing, curframer * 169, 0, 169, 153, 900, 20,  1);
+                        al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
+                        al_draw_bitmap(hp, 600, 300, 0);
+                        al_draw_bitmap(hp2, 50, 50, 0);
+                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "E isso agora voce esta pronto");
+                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "para nossa aventura MATEMATICA!");
+                    }
+                    else if(prox == 19) prox = 7;
                     else{
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 50, 0, "Ola, eu sou o BMO e vou");
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "te explicar como podemos"); 
@@ -865,6 +1096,7 @@ bool inicializarAlvos(Alvo alvos[])
     	y3=(a*(x3*x3))+(x3*b)+c;
     	y4=(a*(x4*x4))+(x4*b)+c;
 	}
+    printf("%d %d %d\n", a,b,c);
     alvos[0].ID = ALVO;
     alvos[0].x = x1;
     alvos[0].y = y1;
