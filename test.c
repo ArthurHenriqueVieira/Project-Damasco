@@ -596,11 +596,11 @@ int main(void)
                         al_draw_scaled_bitmap(finn2, 0, 0, 100, 200, 150, 200, 180, 360, 0);
                         al_draw_bitmap(hp, 600, 300, 0);
                         al_draw_bitmap(hp2, 50, 50, 0);
-                        al_draw_text(font3,al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 660, 270, 0, "FINN THE HUMAN");
                         al_draw_text(font3, al_map_rgb(0,0,0), 50, 30, 0, "ICEKING");
-                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 540, 0, "tem polinomios de grau 1, 2, 3 e ate n,");
-                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 590, 0, "porem eles estao acompanhados de parametros");
-                        al_draw_text(font3,al_map_rgb(0,0,0), 50, 640, 0, "nulos restando apenas um parametro");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 540, 0, "tem polinomios de grau 1, 2, 3 e ate n,");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 590, 0, "porem eles estao acompanhados de parametros");
+                        al_draw_text(font3, al_map_rgb(0,0,0), 50, 640, 0, "nulos restando apenas um parametro");
                         
                     }
                     else if(prox == 16){
