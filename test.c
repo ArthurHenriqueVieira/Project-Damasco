@@ -44,6 +44,8 @@ int framewidth = 111;
 int frameheight = 131;
 bool keys[6] = {false,false,false,false,false, false};
 bool Fire = false;
+int fase =0;
+int testCoordenada[100];
 
 bool posicaoInimigoY;
 
@@ -74,6 +76,7 @@ void UpdateBullet(Bullet *bullet,int a, int b, int c, float *posicao);
 bool inicializarAlvos(Alvo alvos[]);
 void desenharAlvos(Alvo alvos[], int quantidade);
 void verificaColisao(Alvo alvos[], Bullet *bullet);
+void iniciararray(int scoordenadas[]);
 // Background
 void initback(Background *fundo, float x, float y, float velx, int width, int height, int dirX, ALLEGRO_BITMAP *image);
 void updateback(Background *fundo);
@@ -107,7 +110,13 @@ int main(void)
     int count = 0;
     int estado = -1;
 
+    
+    iniciararray(testCoordenada);
+
+
     mudarEstado(&estado, MENU);
+
+
  
     if (!inicializar())
     {
@@ -1049,54 +1058,31 @@ void UpdateBullet(Bullet *bullet, int a, int b, int c, float *posicao)
 //////
 bool inicializarAlvos(Alvo alvos[])
 {
-	int tipo, a,b,c;
-	float x1,x2,x3,x4,y1,y2,y3,y4;
-	srand((unsigned)time(NULL));
-	tipo = rand() % 3;
+	int x1,x2,x3,x4,y1,y2,y3,y4;
 
-	x1 = rand() % 26;
-	x1/=10;
-	x2 = 25 + (rand() % 26);
-	x2/=10;
-	x3 = 50 + (rand() % 26);
-	x3/=10;
-	x4 = 75 + (rand() % 16);
-	x4/=10;
-     
-    do{
-		a= (rand() % 5) -1;
-	}while(a==0);
+    fase++;
+    if(fase==1){
+        x1=testCoordenada[0];
+        y1=testCoordenada[1];
+        x2=testCoordenada[2];
+        y2=testCoordenada[3];
+        x3=testCoordenada[4];
+        y3=testCoordenada[5];
+        x4=testCoordenada[6];
+        y4=testCoordenada[7];
+    }
 
-    do{
-		b= (rand() % 5) -1;
-	}while(b==0);
+    if(fase==3){
+        x1=testCoordenada[8];
+        y1=testCoordenada[9];
+        x2=testCoordenada[10];
+        y2=testCoordenada[11];
+        x3=testCoordenada[12];
+        y3=testCoordenada[13];
+        x4=testCoordenada[14];
+        y4=testCoordenada[15];
+    }
 
-    do{
-		c= (rand() % 11) -1;
-	}while(c==0);
-
-	if(tipo==0){
-    	y1=c;
-    	y2=c;
-    	y3=c;
-    	y4=c;
-    	a=0;
-    	b=0;
-	}	
-	else if(tipo==1){
-		y1=(x1*b)+c;
-    	y2=(x2*b)+c;
-    	y3=(x3*b)+c;
-    	y4=(x4*b)+c;
-    	a=0;
-	}
-	else if(tipo==2){
-	    y1=(a*(x1*x1))+(x1*b)+c;
-    	y2=(a*(x2*x2))+(x2*b)+c;
-    	y3=(a*(x3*x3))+(x3*b)+c;
-    	y4=(a*(x4*x4))+(x4*b)+c;
-	}
-    printf("%d %d %d\n", a,b,c);
     alvos[0].ID = ALVO;
     alvos[0].x = x1;
     alvos[0].y = y1;
@@ -1120,6 +1106,7 @@ bool inicializarAlvos(Alvo alvos[])
     alvos[3].y = y4;
     alvos[3].tamanho = 75;
     alvos[3].acertado = false;
+    printf("%d\n",fase );
 }
 
 void desenharAlvos(Alvo alvos[], int quantidade)
@@ -1194,6 +1181,96 @@ void mudarEstado(int *estado, int novoEstado)
     {
         inicializaJogo();
     }
+}
+
+void iniciararray( int coordenadas[]){
+//////fase 1
+coordenadas[0] = 2;
+coordenadas[1] = 0;
+coordenadas[2] = 4;
+coordenadas[3] = 0;
+
+coordenadas[4] = 6;
+coordenadas[5] = 0;
+coordenadas[6] = 8;
+coordenadas[7] = 0;
+///////fase 2
+coordenadas[8] = 2;
+coordenadas[9] = 7;
+coordenadas[10] = 4;
+coordenadas[11] = 7;
+
+coordenadas[12] = 6;
+coordenadas[13] = 7;
+coordenadas[14] = 8;
+coordenadas[15] = 7;
+
+/////fase 3
+coordenadas[16] = 2;
+coordenadas[17] = 6;
+coordenadas[18] = 4;
+coordenadas[19] = 4;
+
+coordenadas[20] = 6;
+coordenadas[21] = 2;
+coordenadas[22] = 8;
+coordenadas[23] = 1;
+
+/////fase 4
+coordenadas[24] = 2;
+coordenadas[25] = 0;
+coordenadas[26] = 4;
+coordenadas[27] = 2;
+
+coordenadas[28] = 5;
+coordenadas[29] = 3;
+coordenadas[30] = 8;
+coordenadas[31] = 6;
+
+/////fase 5
+coordenadas[32] = 2;
+coordenadas[33] = 0;
+coordenadas[34] = 4;
+coordenadas[35] = 2;
+
+coordenadas[36] = 5;
+coordenadas[37] = 3;
+coordenadas[38] = 8;
+coordenadas[39] = 6;
+
+/////fase 6
+coordenadas[40] = 2;
+coordenadas[41] = 0;
+coordenadas[42] = 4;
+coordenadas[43] = 2;
+
+coordenadas[44] = 5;
+coordenadas[45] = 3;
+coordenadas[46] = 8;
+coordenadas[47] = 6;
+
+/////fase 7
+coordenadas[48] = 2;
+coordenadas[49] = 0;
+coordenadas[50] = 4;
+coordenadas[51] = 2;
+
+coordenadas[52] = 5;
+coordenadas[53] = 3;
+coordenadas[54] = 8;
+coordenadas[55] = 6;
+
+/////fase 8
+coordenadas[56] = 2;
+coordenadas[57] = 0;
+coordenadas[58] = 4;
+coordenadas[59] = 2;
+
+coordenadas[60] = 5;
+coordenadas[61] = 3;
+coordenadas[62] = 8;
+coordenadas[63] = 6;
+
 }
 
 bool inicializar()
