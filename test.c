@@ -1160,6 +1160,38 @@ bool inicializarAlvos(Alvo alvos[], int fase)
         x4=testCoordenada[14];
         y4=testCoordenada[15];
     }
+    if(fase==3){
+        x1=testCoordenada[16];
+        y1=testCoordenada[17];
+        x2=testCoordenada[18];
+        y2=testCoordenada[19];
+        x3=testCoordenada[20];
+        y3=testCoordenada[21];
+        x4=testCoordenada[22];
+        y4=testCoordenada[23];
+    }
+
+    if(fase==4){
+        x1=testCoordenada[24];
+        y1=testCoordenada[25];
+        x2=testCoordenada[26];
+        y2=testCoordenada[27];
+        x3=testCoordenada[28];
+        y3=testCoordenada[29];
+        x4=testCoordenada[30];
+        y4=testCoordenada[31];
+    }
+
+    if(fase==5){
+        x1=testCoordenada[32];
+        y1=testCoordenada[33];
+        x2=testCoordenada[34];
+        y2=testCoordenada[35];
+        x3=testCoordenada[36];
+        y3=testCoordenada[37];
+        x4=testCoordenada[38];
+        y4=testCoordenada[39];
+    }
 
     alvos[0].ID = ALVO;
     alvos[0].x = x1;
@@ -1309,21 +1341,21 @@ coordenadas[25] = 0;
 coordenadas[26] = 4;
 coordenadas[27] = 2;
 
-coordenadas[28] = 5;
+coordenadas[28] = 6;
 coordenadas[29] = 3;
 coordenadas[30] = 8;
 coordenadas[31] = 6;
 
 /////fase 5
-coordenadas[32] = 2;
-coordenadas[33] = 0;
-coordenadas[34] = 4;
-coordenadas[35] = 2;
+coordenadas[32] = 1;
+coordenadas[33] = 5;
+coordenadas[34] = 3;
+coordenadas[35] = 9;
 
 coordenadas[36] = 5;
-coordenadas[37] = 3;
-coordenadas[38] = 8;
-coordenadas[39] = 6;
+coordenadas[37] = 5;
+coordenadas[38] = 6;
+coordenadas[39] = 0;
 
 /////fase 6
 coordenadas[40] = 2;
