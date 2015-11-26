@@ -24,8 +24,8 @@ ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
 ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL;
 ALLEGRO_BITMAP *Seta = NULL;
-ALLEGRO_AUDIO_STREAM *musica = NULL, *musica2 = NULL;
-ALLEGRO_SAMPLE *sample = NULL;
+ALLEGRO_AUDIO_STREAM *musica2 = NULL;
+ALLEGRO_SAMPLE *sample = NULL, *musica = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
@@ -449,7 +449,6 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 100, 0, "meu display!");
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");
                         al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0); 
-                        al_set_audio_stream_playing(musica, false);
                         al_attach_audio_stream_to_mixer(musica2, al_get_default_mixer());
                     }
                     else if(prox == 6){
@@ -520,7 +519,6 @@ int main(void)
                         }else if(pos == 2 && keys[ENTER] && i >= 100){
                             mudarEstado(&estado, MENU);
                             al_set_audio_stream_playing(musica2, false);
-                            al_set_audio_stream_playing(musica, true);
                             i = 0;
                             prox = 0;
                             ct = 1280;
@@ -904,7 +902,7 @@ int main(void)
     al_destroy_bitmap(Seta);
     al_destroy_bitmap(dialog);
     al_destroy_event_queue(fila_eventos);
-    al_destroy_audio_stream(musica);
+    al_destroy_sample(musica);
     al_destroy_audio_stream(musica2);
  
     return 0;
@@ -1435,7 +1433,7 @@ bool inicializar()
         return false;
     }
 
-    if (!al_reserve_samples(1)){
+    if (!al_reserve_samples(10)){
         fprintf(stderr, "Falha ao alocar canais de áudio.\n");
         return false;
     }
@@ -1460,9 +1458,8 @@ bool inicializar()
         return -1;
     }
 
-    musica = al_load_audio_stream("bits.ogg", 4, 1024);
     musica2 = al_load_audio_stream("Pokemon.ogg", 4, 1024);
-    if (!musica)
+    if (!musica2)
     {
         fprintf(stderr, "Falha ao carregar audio.\n");
         al_destroy_event_queue(fila_eventos);
@@ -1470,8 +1467,8 @@ bool inicializar()
         al_destroy_sample(sample);
         return false;
     }
-
-    sample = al_load_sample("palmas.wav");
+    musica = al_load_sample("Bit Rush.wav");
+    sample = al_load_sample("palmas.ogg");
     if (!sample)
     {
         fprintf(stderr, "Falha ao carregar sample.\n");
@@ -1528,11 +1525,9 @@ bool inicializar()
         fprintf(stderr, "Erro ao carregar fonte\n");
         return -1;
     }
- 
-    al_attach_audio_stream_to_mixer(musica, al_get_default_mixer());
-    al_set_audio_stream_playing(musica, true);
     
-    al_reserve_samples(1);
+    al_play_sample(musica, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, NULL);
+
     menuBg = al_load_bitmap("menu.jpg");
     timer = al_create_timer(1.0/60);
 
