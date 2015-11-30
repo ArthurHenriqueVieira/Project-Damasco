@@ -25,8 +25,8 @@ ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
 ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL, *menuf = NULL, *Cloud = NULL, *Mountain = NULL;
 ALLEGRO_BITMAP *Seta = NULL, *Logo = NULL, *Fase = NULL, *bee = NULL;
-ALLEGRO_AUDIO_STREAM *musica2 = NULL;
-ALLEGRO_SAMPLE *sample = NULL, *musica = NULL, *Tut = NULL;
+ALLEGRO_AUDIO_STREAM *musica2 = NULL, *Tut = NULL;
+ALLEGRO_SAMPLE *sample = NULL, *musica = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL, *FinnJK = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
@@ -120,8 +120,6 @@ int main(void)
     float y = raio;
     int dir_x = 1, dir_y = 1;
 
-
-    
     iniciararray(testCoordenada);
     mudarEstado(&estado, MENU);
  
@@ -216,6 +214,11 @@ int main(void)
                             break;
                         case ALLEGRO_KEY_ENTER:
                             if(ct > 150) ct = 150;
+                            if(prox == 5){
+                                al_set_audio_stream_playing(Tut, false);
+                                al_attach_audio_stream_to_mixer(musica2, al_get_default_mixer());
+                                al_set_audio_stream_playing(musica2, true);
+                            }
                             if(prox < 7) prox += 1;
                             if(prox > 7) volta = true;
                             keys[ENTER] = true;
@@ -290,15 +293,18 @@ int main(void)
 
                }
             }
-            // aqui ele identifica o clique do mouse no menu, esta em ordem Jogar, Tutorial e Sair
+
             if(ev.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP)
             {
                 if (estado == MENU)
                 {
                     if (ev.mouse.x >= 530 && ev.mouse.x <= 730 && ev.mouse.y >= 300 && ev.mouse.y <= 340)
                         mudarEstado(&estado, MENUFASES);
-                    else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390)
+                    else if (ev.mouse.x >= 500 && ev.mouse.x <= 760 && ev.mouse.y >= 350 && ev.mouse.y <= 390){
                         mudarEstado(&estado, TUTORIAL);
+                        al_attach_audio_stream_to_mixer(Tut, al_get_default_mixer());
+                    }
+
                     else if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 400 && ev.mouse.y <= 440)
                     sair = true;
                 }
@@ -490,11 +496,9 @@ int main(void)
                         al_draw_text(font, al_map_rgb(0,0,0), 450, 150, 0, "simulacao. ");
                         al_draw_text(font2, al_map_rgb(0,0,0), 850, 300, 0, "Aperte Enter");
                         al_draw_scaled_bitmap(pkfundo, 0, 0, 1280, 720, 275, 350, 110, 100, 0); 
-                        al_attach_audio_stream_to_mixer(musica2, al_get_default_mixer());
                     }
                     else if(prox == 6){
                         al_draw_bitmap(pkfundo, 0,0,0);
-                        al_set_audio_stream_playing(musica2, true);
                         cr += 2;
                         cf -= 2;
                         if(cr >= 900) cr = 900;
@@ -557,6 +561,7 @@ int main(void)
                         }else if(pos == 1 && keys[ENTER] && i >= 100){
                             mudarEstado(&estado, MENUFASES);
                             al_set_audio_stream_playing(musica2, false);
+                            al_play_sample(musica, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, &foo);
                             pos = 0;
                             prox = 0;
                             ct = 1280;
@@ -566,6 +571,7 @@ int main(void)
                         }else if(pos == 2 && keys[ENTER] && i >= 100){
                             mudarEstado(&estado, MENU);
                             al_set_audio_stream_playing(musica2, false);
+                            al_play_sample(musica, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, &foo);
                             i = 0;
                             prox = 0;
                             ct = 1280;
@@ -767,7 +773,7 @@ int main(void)
     al_destroy_bitmap(Mountain);
     al_destroy_bitmap(Logo);
     al_destroy_bitmap(Fase);
-    al_destroy_sample(Tut);
+    al_destroy_audio_stream(Tut);
     al_destroy_bitmap(bee);
  
     return 0;
@@ -1332,7 +1338,7 @@ bool inicializar()
     }
     musica = al_load_sample("Bit Rush.wav");
     sample = al_load_sample("palmas.ogg");
-    Tut = al_load_sample("Tuts.ogg");
+    Tut = al_load_audio_stream("Tuts.ogg", 4, 1024);
     if (!sample)
     {
         fprintf(stderr, "Falha ao carregar sample.\n");
