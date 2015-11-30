@@ -106,7 +106,7 @@ int main(void)
 {
     bool exit    = false;
     bool render  = false;
-    bool over    = false, over2 = false, over3 = false, over4 = false, over5 = false;
+    bool over    = false, over2 = false, over3 = false, over4 = false, over5 = false, over6 = false;
     bool equacoes[3] = {false, false, false};
     bool sair = false, end = false;
 
@@ -135,8 +135,10 @@ int main(void)
             if(ev.type == ALLEGRO_EVENT_TIMER)
             {
                  updateback(&imagemDeFundo);
-                 updateback(&Menu);
-                 updateback(&Mountan);
+                 if(estado == MENU){
+                    updateback(&Menu);
+                    updateback(&Mountan);
+                 }
                  render = true;
             }
 
@@ -262,6 +264,11 @@ int main(void)
                     if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 450 && ev.mouse.y <= 490){
                         over5 = true;
                     }else over5 = false;
+
+                    if (ev.mouse.x >= 1030 && ev.mouse.x <= 1170 && ev.mouse.y >= 650 && ev.mouse.y <= 680){
+                        over6 = true;
+                    }else over6 = false;
+
                }
                else if (estado == FIM)
                {
@@ -300,7 +307,10 @@ int main(void)
                     if (ev.mouse.x >= 560 && ev.mouse.x <= 700 && ev.mouse.y >= 450 && ev.mouse.y <= 490)
                         fase = 5;
 
-                    mudarEstado(&estado, JOGO);
+                    if (ev.mouse.x >= 1030 && ev.mouse.x <= 1170 && ev.mouse.y >= 650 && ev.mouse.y <= 680){
+                        mudarEstado(&estado, MENU);
+                    }else
+                        mudarEstado(&estado, JOGO);
                 }
                 else if (estado == FIM)
                 {
@@ -402,6 +412,10 @@ int main(void)
                 if(!over5)  
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 450,ALLEGRO_ALIGN_CENTRE, "Fase 5");
                 else al_draw_text(font, al_map_rgb(255,255,255), 630, 450,ALLEGRO_ALIGN_CENTRE, "Fase 5");
+
+                if(!over6)  
+                    al_draw_text(font, al_map_rgb(0,0,0), 1100, 650, ALLEGRO_ALIGN_CENTRE, "voltar");
+                else al_draw_text(font, al_map_rgb(255,255,255), 1100, 650,ALLEGRO_ALIGN_CENTRE, "voltar");
             }
             else if(estado == TUTORIAL)
             {
