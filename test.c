@@ -24,7 +24,7 @@ ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
 ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL, *menuf = NULL, *Cloud = NULL, *Mountain = NULL;
-ALLEGRO_BITMAP *Seta = NULL;
+ALLEGRO_BITMAP *Seta = NULL, *Logo = NULL, *Fase = NULL;
 ALLEGRO_AUDIO_STREAM *musica2 = NULL;
 ALLEGRO_SAMPLE *sample = NULL, *musica = NULL;
 ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL, *FinnJK = NULL;
@@ -359,6 +359,7 @@ int main(void)
             {
                 drawback(&Menu);
                 drawback(&Mountan);
+                al_draw_scaled_bitmap(Logo, 0, 0, 800, 500, 50, 20, 450, 312, 0);
                 al_draw_scaled_bitmap(FinnJK, 0, 0, 655, 596, 420, oi, 459, 417, 0);
 
                 oi += dir;
@@ -380,8 +381,7 @@ int main(void)
             }
             else if (estado == MENUFASES)
             {
-                al_draw_bitmap(menuBg, 0, 0, 0);
-                al_draw_bitmap(BMO, 110, -30, 0);
+                al_draw_bitmap(Fase, 0, 0, 0);
 
                 if(!over)
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 250,ALLEGRO_ALIGN_CENTRE, "Fase 1");
@@ -903,6 +903,8 @@ int main(void)
     al_destroy_sample(musica);
     al_destroy_audio_stream(musica2);
     al_destroy_bitmap(Mountain);
+    al_destroy_bitmap(Logo);
+    al_destroy_bitmap(Fase);
  
     return 0;
 }
@@ -1506,6 +1508,8 @@ bool inicializar()
     aba = al_load_bitmap("aba.png");
     Cloud = al_load_bitmap("Cloud.png");
     Mountain = al_load_bitmap("Mountain.png");
+    Logo = al_load_bitmap("Logo.png");
+    Fase = al_load_bitmap("Fase.jpg");
 
     initback(&imagemDeFundo, 0, 0, 0.3, 1280, 720, -1, image);
     initback(&Menu, 0, 0, 0.5, 1280, 720, -1, Cloud);
