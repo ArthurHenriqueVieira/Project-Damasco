@@ -18,15 +18,16 @@ const int LARGURA_TELA = 1280;
 const int ALTURA_TELA = 720;
 const int NUM_BULLETS = 5;
  
+ALLEGRO_SAMPLE_ID foo;
 ALLEGRO_DISPLAY *janela = NULL;
 ALLEGRO_EVENT_QUEUE *fila_eventos = NULL;
 ALLEGRO_TIMER *timer;
 ALLEGRO_BITMAP *menuBg = NULL;
-ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL;
+ALLEGRO_BITMAP *image = NULL,*image2 = NULL, *TreeHouse = NULL, *fundo = NULL, *pkfundo = NULL, *aba = NULL, *menuf = NULL, *Cloud = NULL, *Mountain = NULL;
 ALLEGRO_BITMAP *Seta = NULL;
 ALLEGRO_AUDIO_STREAM *musica2 = NULL;
 ALLEGRO_SAMPLE *sample = NULL, *musica = NULL;
-ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL;
+ALLEGRO_BITMAP *Finn = NULL,*Jake = NULL,*BMO = NULL,*Gunter = NULL,*LadyRainicorn = NULL, *IceKing = NULL, *finn2 = NULL, *FinnJK = NULL;
 ALLEGRO_BITMAP *Flame = NULL, *Fireball = NULL, *Bomb = NULL,*FinnBomb = NULL, *ThrowJake = NULL, *dialog = NULL, *hp = NULL, *hp2 = NULL;
 ALLEGRO_FONT *font = NULL, *font2 = NULL, *font3 = NULL;
 
@@ -34,15 +35,15 @@ enum ESTADO{MENU, MENUFASES, TUTORIAL, JOGO, FIM};
 enum FUNC{CONS, PRIM, SEC};
 enum KEYS{UP, DOWN, LEFT, RIGHT, SPACE, ENTER};
 
-
 // Variaveis
 int a,b,c,x,y;
 int pos,aux=1,temp=0, ct = 1280, cr = -50, cf = 1280, prox = 0, i = 0;
+float oi = 100;
 int curframe = 0, curframeb = 0, curframer = 0, curframee = 0, curframeLady = 0;
 int framecount = 0, framecountr = 0, framecounte = 0,framecountLady = 0, framedelay = 60;
 int framewidth = 111;
 int frameheight = 131;
-int fase =0;
+int fase = 0;
 int testCoordenada[100];
 int pontuacao;
 
@@ -54,6 +55,8 @@ bool posicaoInimigoY;
 //Variaveis Struct 
 Character FinnJake;
 Background imagemDeFundo;
+Background Menu;
+Background Mountan;
 Bullet bullets;
 Alvo listaDeAlvos[4];
 
@@ -103,9 +106,7 @@ int main(void)
 {
     bool exit    = false;
     bool render  = false;
-
-    bool over = false, over2 = false, over3 = false, over4 = false, over5 = false;
-    
+    bool over    = false, over2 = false, over3 = false, over4 = false, over5 = false;
     bool equacoes[3] = {false, false, false};
     bool sair = false, end = false;
 
@@ -113,14 +114,11 @@ int main(void)
 
     int count = 0;
     int estado = -1;
+    float dir = .1;
 
     
     iniciararray(testCoordenada);
-
-
     mudarEstado(&estado, MENU);
-
-
  
     if (!inicializar())
     {
@@ -137,6 +135,8 @@ int main(void)
             if(ev.type == ALLEGRO_EVENT_TIMER)
             {
                  updateback(&imagemDeFundo);
+                 updateback(&Menu);
+                 updateback(&Mountan);
                  render = true;
             }
 
@@ -310,6 +310,8 @@ int main(void)
                     }
                 }
             }
+
+            if(estado != MENU && estado != MENUFASES) al_stop_sample(&foo); 
             
             if(pos < 0) pos = 2;
             if(pos > 2) pos = 0;
@@ -355,8 +357,14 @@ int main(void)
         {
             if (estado == MENU)
             {
-                al_draw_bitmap(menuBg, 0, 0, 0);
-                al_draw_bitmap(BMO, 110, -30, 0);
+                drawback(&Menu);
+                drawback(&Mountan);
+                al_draw_scaled_bitmap(FinnJK, 0, 0, 655, 596, 420, oi, 459, 417, 0);
+
+                oi += dir;
+
+                if(oi <= 80) dir = .1;
+                if(oi >= 120) dir = -.1;
 
                 if(!over)
                     al_draw_text(font, al_map_rgb(0,0,0), 630, 300,ALLEGRO_ALIGN_CENTRE, "Jogar");
@@ -776,19 +784,6 @@ int main(void)
                 } 
                 
                 InitCharacter(&FinnJake, &c);
-                if(end){
-                    segundograu(a, b, c, aux, &temp);
-                    desenharBotoes(equacoes);
-                    DrawCharacter(&FinnJake, &bullets);
-                    desenharImagens();
-                    desenharAlvos(listaDeAlvos, 4);
-                    if(pos == 0)
-                        al_draw_bitmap(Seta, 570, 640, 0);
-                    else if(pos == 1)
-                        al_draw_bitmap(Seta, 690, 640, 0);
-                    else if(pos == 2)
-                        al_draw_bitmap(Seta, 820, 640, 0);
-                }
                 DrawBullet(&bullets);
                 verificaColisao(listaDeAlvos, &bullets);
                 UpdateBullet(&bullets, a, b, c, &posicao);
@@ -881,10 +876,12 @@ int main(void)
     al_destroy_bitmap(aba);
     al_destroy_font(font3);
     al_destroy_bitmap(fundo);
+    al_destroy_bitmap(menuf);
     al_destroy_bitmap(pkfundo);
     al_destroy_sample(sample);
     al_destroy_bitmap(image);
     al_destroy_bitmap(Finn);
+    al_destroy_bitmap(FinnJK);
     al_destroy_bitmap(finn2);
     al_destroy_bitmap(Jake);
     al_destroy_bitmap(LadyRainicorn);
@@ -901,13 +898,14 @@ int main(void)
     al_destroy_display(janela);
     al_destroy_bitmap(Seta);
     al_destroy_bitmap(dialog);
+    al_destroy_bitmap(Cloud);
     al_destroy_event_queue(fila_eventos);
     al_destroy_sample(musica);
     al_destroy_audio_stream(musica2);
+    al_destroy_bitmap(Mountain);
  
     return 0;
 }
-
 //////
 // Plano Cartesiano
 //////
@@ -925,13 +923,13 @@ int pegarValorEmY(int valor)
     int resposta = origemY - (valor*50);    
     return resposta;
 }
-void coordenadas(float *x, float *y){
+void coordenadas(float *x, float *y)
+{
     float OrigemX = 250;
     float OrigemY = 500;
 
     *x=OrigemX + ((*x) * 100);
     *y=OrigemY - ((*y) * 50);
-
 }
 
 void segundograu(float a, float b, float c,int aux, int * auxtemp){
@@ -1301,93 +1299,92 @@ void mudarEstado(int *estado, int novoEstado)
 }
 
 void iniciararray( int coordenadas[]){
-//////fase 1
-coordenadas[0] = 2;
-coordenadas[1] = 0;
-coordenadas[2] = 4;
-coordenadas[3] = 0;
-
-coordenadas[4] = 6;
-coordenadas[5] = 0;
-coordenadas[6] = 8;
-coordenadas[7] = 0;
-///////fase 2
-coordenadas[8] = 2;
-coordenadas[9] = 7;
-coordenadas[10] = 4;
-coordenadas[11] = 7;
-
-coordenadas[12] = 6;
-coordenadas[13] = 7;
-coordenadas[14] = 8;
-coordenadas[15] = 7;
-
-/////fase 3
-coordenadas[16] = 2;
-coordenadas[17] = 6;
-coordenadas[18] = 4;
-coordenadas[19] = 4;
-
-coordenadas[20] = 6;
-coordenadas[21] = 2;
-coordenadas[22] = 8;
-coordenadas[23] = 1;
-
-/////fase 4
-coordenadas[24] = 2;
-coordenadas[25] = 0;
-coordenadas[26] = 4;
-coordenadas[27] = 2;
-
-coordenadas[28] = 6;
-coordenadas[29] = 3;
-coordenadas[30] = 8;
-coordenadas[31] = 6;
-
-/////fase 5
-coordenadas[32] = 1;
-coordenadas[33] = 5;
-coordenadas[34] = 3;
-coordenadas[35] = 9;
-
-coordenadas[36] = 5;
-coordenadas[37] = 5;
-coordenadas[38] = 6;
-coordenadas[39] = 0;
-
-/////fase 6
-coordenadas[40] = 2;
-coordenadas[41] = 0;
-coordenadas[42] = 4;
-coordenadas[43] = 2;
-
-coordenadas[44] = 5;
-coordenadas[45] = 3;
-coordenadas[46] = 8;
-coordenadas[47] = 6;
-
-/////fase 7
-coordenadas[48] = 2;
-coordenadas[49] = 0;
-coordenadas[50] = 4;
-coordenadas[51] = 2;
-
-coordenadas[52] = 5;
-coordenadas[53] = 3;
-coordenadas[54] = 8;
-coordenadas[55] = 6;
-
-/////fase 8
-coordenadas[56] = 2;
-coordenadas[57] = 0;
-coordenadas[58] = 4;
-coordenadas[59] = 2;
-
-coordenadas[60] = 5;
-coordenadas[61] = 3;
-coordenadas[62] = 8;
-coordenadas[63] = 6;
-
+    //////fase 1
+    coordenadas[0] = 2;
+    coordenadas[1] = 0;
+    coordenadas[2] = 4;
+    coordenadas[3] = 0;
+    
+    coordenadas[4] = 6;
+    coordenadas[5] = 0;
+    coordenadas[6] = 8;
+    coordenadas[7] = 0;
+    ///////fase 2
+    coordenadas[8] = 2;
+    coordenadas[9] = 7;
+    coordenadas[10] = 4;
+    coordenadas[11] = 7;
+    
+    coordenadas[12] = 6;
+    coordenadas[13] = 7;
+    coordenadas[14] = 8;
+    coordenadas[15] = 7;
+    
+    /////fase 3
+    coordenadas[16] = 2;
+    coordenadas[17] = 6;
+    coordenadas[18] = 4;
+    coordenadas[19] = 4;
+    
+    coordenadas[20] = 6;
+    coordenadas[21] = 2;
+    coordenadas[22] = 8;
+    coordenadas[23] = 1;
+    
+    /////fase 4
+    coordenadas[24] = 2;
+    coordenadas[25] = 0;
+    coordenadas[26] = 4;
+    coordenadas[27] = 2;
+    
+    coordenadas[28] = 6;
+    coordenadas[29] = 3;
+    coordenadas[30] = 8;
+    coordenadas[31] = 6;
+    
+    /////fase 5
+    coordenadas[32] = 1;
+    coordenadas[33] = 5;
+    coordenadas[34] = 3;
+    coordenadas[35] = 9;
+    
+    coordenadas[36] = 5;
+    coordenadas[37] = 5;
+    coordenadas[38] = 6;
+    coordenadas[39] = 0;
+    
+    /////fase 6
+    coordenadas[40] = 2;
+    coordenadas[41] = 0;
+    coordenadas[42] = 4;
+    coordenadas[43] = 2;
+    
+    coordenadas[44] = 5;
+    coordenadas[45] = 3;
+    coordenadas[46] = 8;
+    coordenadas[47] = 6;
+    
+    /////fase 7
+    coordenadas[48] = 2;
+    coordenadas[49] = 0;
+    coordenadas[50] = 4;
+    coordenadas[51] = 2;
+    
+    coordenadas[52] = 5;
+    coordenadas[53] = 3;
+    coordenadas[54] = 8;
+    coordenadas[55] = 6;
+    
+    /////fase 8
+    coordenadas[56] = 2;
+    coordenadas[57] = 0;
+    coordenadas[58] = 4;
+    coordenadas[59] = 2;
+    
+    coordenadas[60] = 5;
+    coordenadas[61] = 3;
+    coordenadas[62] = 8;
+    coordenadas[63] = 6;
 }
 
 bool inicializar()
@@ -1483,9 +1480,11 @@ bool inicializar()
         return -1;
     }
 
+    menuf = al_load_bitmap("menuf.png");
     image2 = al_load_bitmap("chas2.jpg");
     image = al_load_bitmap("chas.jpg");
     Finn = al_load_bitmap("Finn.png");
+    FinnJK = al_load_bitmap("FinnJk.png");
     finn2 = al_load_bitmap("finntut.png");
     Jake = al_load_bitmap("Jake.png");
     LadyRainicorn = al_load_bitmap("LadyRainicorn.png");
@@ -1505,8 +1504,12 @@ bool inicializar()
     hp = al_load_bitmap("life.png");
     hp2 = al_load_bitmap("life2.png");
     aba = al_load_bitmap("aba.png");
+    Cloud = al_load_bitmap("Cloud.png");
+    Mountain = al_load_bitmap("Mountain.png");
 
-    initback(&imagemDeFundo, 0, 0, 0.2, 1280, 720, -1, image);
+    initback(&imagemDeFundo, 0, 0, 0.3, 1280, 720, -1, image);
+    initback(&Menu, 0, 0, 0.5, 1280, 720, -1, Cloud);
+    initback(&Mountan, 0, 550, 0.15, 1280, 720, -1, Mountain);
     
     font = al_load_font("04B_30__.ttf", 30, 0);
     font2 = al_load_font("04B_30__.ttf", 15, 0);
@@ -1526,7 +1529,7 @@ bool inicializar()
         return -1;
     }
     
-    al_play_sample(musica, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, NULL);
+    al_play_sample(musica, 1, 0, 1, ALLEGRO_PLAYMODE_LOOP, &foo);
 
     menuBg = al_load_bitmap("menu.jpg");
     timer = al_create_timer(1.0/60);
